@@ -1,0 +1,111 @@
+{
+  "saturday": {
+    "date": "2026-08-15",
+    "stages": [
+      {
+        "id": "poton",
+        "name": "Poton",
+        "acts": [
+          { "id": "armin", "artist": "Armin van Buuren", "start": "10:00", "end": "12:00", "genre": "Trance" },
+          { "id": "kensington", "artist": "Kensington", "start": "12:30", "end": "14:00", "genre": "Indie Rock" },
+          { "id": "de-staat", "artist": "De Staat", "start": "14:30", "end": "16:00", "genre": "Experimental Rock" },
+          { "id": "navarone", "artist": "Navarone", "start": "16:30", "end": "18:00", "genre": "Rock" },
+          { "id": "dotan", "artist": "Dotan", "start": "18:30", "end": "20:00", "genre": "Folk-pop" },
+          { "id": "froukje", "artist": "Froukje", "start": "20:30", "end": "23:45", "genre": "Pop" }
+        ]
+      },
+      {
+        "id": "the-lake",
+        "name": "The Lake",
+        "acts": [
+          { "id": "talent-sat-1", "artist": "Talent set 1", "start": "10:00", "end": "11:15", "genre": "Talent" },
+          { "id": "talent-sat-2", "artist": "Talent set 2", "start": "11:30", "end": "12:45", "genre": "Talent" },
+          { "id": "talent-sat-3", "artist": "Talent set 3", "start": "13:00", "end": "14:15", "genre": "Talent" },
+          { "id": "talent-sat-4", "artist": "Talent set 4", "start": "14:30", "end": "15:45", "genre": "Talent" },
+          { "id": "talent-sat-5", "artist": "Talent set 5", "start": "16:00", "end": "17:15", "genre": "Talent" },
+          { "id": "talent-sat-6", "artist": "Talent set 6", "start": "17:30", "end": "18:45", "genre": "Talent" },
+          { "id": "talent-sat-7", "artist": "Talent set 7", "start": "19:00", "end": "23:45", "genre": "Talent" }
+        ]
+      },
+      {
+        "id": "the-club",
+        "name": "The Club",
+        "acts": [
+          { "id": "comedy-sat", "artist": "Comedy", "start": "10:00", "end": "11:30", "genre": "Comedy" },
+          { "id": "lecture-sat", "artist": "Lecture", "start": "12:00", "end": "13:30", "genre": "Lecture" },
+          { "id": "theater-sat", "artist": "Theater", "start": "14:00", "end": "16:00", "genre": "Theater" },
+          { "id": "movie-sat", "artist": "Movie", "start": "16:30", "end": "18:30", "genre": "Film" },
+          { "id": "performance-sat", "artist": "Performance", "start": "19:00", "end": "21:00", "genre": "Performance" },
+          { "id": "illusionist-sat", "artist": "Illusionist", "start": "21:30", "end": "23:45", "genre": "Illusie" }
+        ]
+      },
+      {
+        "id": "hanggar",
+        "name": "Hanggar",
+        "acts": [
+          { "id": "dj-sat-1", "artist": "DJ set 1", "start": "10:00", "end": "11:15", "genre": "DJ" },
+          { "id": "dj-sat-2", "artist": "DJ set 2", "start": "11:30", "end": "12:45", "genre": "DJ" },
+          { "id": "dj-sat-3", "artist": "DJ set 3", "start": "13:00", "end": "14:15", "genre": "DJ" },
+          { "id": "dj-sat-4", "artist": "DJ set 4", "start": "14:30", "end": "15:45", "genre": "DJ" },
+          { "id": "dj-sat-5", "artist": "DJ set 5", "start": "16:00", "end": "17:15", "genre": "DJ" },
+          { "id": "dj-sat-6", "artist": "DJ set 6", "start": "17:30", "end": "18:45", "genre": "DJ" },
+          { "id": "dj-sat-7", "artist": "DJ set 7", "start": "19:00", "end": "21:00", "genre": "DJ" },
+          { "id": "dj-sat-8", "artist": "DJ set 8", "start": "21:30", "end": "23:45", "genre": "DJ" }
+        ]
+      }
+    ]
+  },
+  "sunday": {
+    "date": "2026-08-16",
+    "stages": [
+      {
+        "id": "poton",
+        "name": "Poton",
+        "acts": [
+          { "id": "martin", "artist": "Martin Garrix", "start": "10:00", "end": "12:00", "genre": "EDM" },
+          { "id": "within", "artist": "Within Temptation", "start": "12:30", "end": "14:00", "genre": "Symphonic Metal" },
+          { "id": "chefspecial", "artist": "Chef'Special", "start": "14:30", "end": "16:00", "genre": "Funk-pop" },
+          { "id": "eefje", "artist": "Eefje de Visser", "start": "16:30", "end": "18:00", "genre": "Indie-pop" },
+          { "id": "spinvis", "artist": "Spinvis", "start": "18:30", "end": "23:45", "genre": "Lo-fi pop" }
+        ]
+      },
+      {
+        "id": "the-lake",
+        "name": "The Lake",
+        "acts": [
+          { "id": "talent-sun-1", "artist": "Talent set 1", "start": "10:00", "end": "11:15", "genre": "Talent" },
+          { "id": "talent-sun-2", "artist": "Talent set 2", "start": "11:30", "end": "12:45", "genre": "Talent" },
+          { "id": "talent-sun-3", "artist": "Talent set 3", "start": "13:00", "end": "14:15", "genre": "Talent" },
+          { "id": "talent-sun-4", "artist": "Talent set 4", "start": "14:30", "end": "15:45", "genre": "Talent" },
+          { "id": "talent-sun-5", "artist": "Talent set 5", "start": "16:00", "end": "17:15", "genre": "Talent" },
+          { "id": "talent-sun-6", "artist": "Talent set 6", "start": "17:30", "end": "23:45", "genre": "Talent" }
+        ]
+      },
+      {
+        "id": "the-club",
+        "name": "The Club",
+        "acts": [
+          { "id": "comedy-sun", "artist": "Comedy", "start": "10:00", "end": "11:30", "genre": "Comedy" },
+          { "id": "lecture-sun", "artist": "Lecture", "start": "12:00", "end": "13:30", "genre": "Lecture" },
+          { "id": "theater-sun", "artist": "Theater", "start": "14:00", "end": "16:00", "genre": "Theater" },
+          { "id": "movie-sun", "artist": "Movie", "start": "16:30", "end": "18:30", "genre": "Film" },
+          { "id": "magic-sun", "artist": "Magic Show", "start": "19:00", "end": "23:45", "genre": "Magic" }
+        ]
+      },
+      {
+        "id": "hanggar",
+        "name": "Hanggar",
+        "acts": [
+          { "id": "dj-sun-1", "artist": "DJ set 1", "start": "10:00", "end": "11:15", "genre": "DJ" },
+          { "id": "dj-sun-2", "artist": "DJ set 2", "start": "11:30", "end": "12:45", "genre": "DJ" },
+          { "id": "dj-sun-3", "artist": "DJ set 3", "start": "13:00", "end": "14:15", "genre": "DJ" },
+          { "id": "dj-sun-4", "artist": "DJ set 4", "start": "14:30", "end": "15:45", "genre": "DJ" },
+          { "id": "dj-sun-5", "artist": "DJ set 5", "start": "16:00", "end": "17:15", "genre": "DJ" },
+          { "id": "dj-sun-6", "artist": "DJ set 6", "start": "17:30", "end": "18:45", "genre": "DJ" },
+          { "id": "dj-sun-7", "artist": "DJ set 7", "start": "19:00", "end": "21:00", "genre": "DJ" },
+          { "id": "dj-sun-8", "artist": "DJ set 8", "start": "21:30", "end": "23:45", "genre": "DJ" }
+        ]
+      }
+    ]
+  }
+}

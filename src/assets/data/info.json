@@ -1,0 +1,148 @@
+{
+  "nl": {
+    "sections": [
+      {
+        "id": "general",
+        "title": "Algemeen & Contact",
+        "content": "Het ❤️U Festival is voor (nieuwe) studenten in de regio Utrecht en is een aanvulling op de Utrechtse Introductie Tijd (UIT)."
+      },
+      {
+        "id": "location",
+        "title": "Locatie",
+        "content": "Locatie: Grasweide Strijkviertel, Utrecht\nNavigatieadres: Strijkviertelweg, Utrecht"
+      },
+      {
+        "id": "datetime",
+        "title": "Datum & Openingstijden",
+        "content": "Zaterdag 15 augustus 2026 — 10:00 tot 23:45 uur\nZondag 16 augustus 2026 — 10:00 tot 23:45 uur"
+      },
+      {
+        "id": "transport",
+        "title": "Bereikbaarheid",
+        "subsections": [
+          {
+            "title": "Fiets",
+            "content": "Er is een grote gratis fietsenstalling aanwezig waar je jouw fiets de gehele dag kunt stallen."
+          },
+          {
+            "title": "Auto",
+            "content": "Je kunt een parkingticket aanschaffen. Parkeren kan op P+R Papendorp, volg hiervoor de borden 'P online ticket'. Heb je geen ticket van tevoren gekocht? Dan kun je bij de parkeerwachter op locatie een parkeerticket aanschaffen (PIN ONLY). Let op: VOL=VOL."
+          },
+          {
+            "title": "OV",
+            "content": "Kom je met het openbaar vervoer? Plan dan je trip via 9292.nl."
+          },
+          {
+            "title": "Shuttlebus",
+            "content": "Vanaf Utrecht Centraal kun je de gratis shuttlebus richting het festivalterrein pakken. Je vindt deze bus aan de Mineurslaan. Volg de witte bordjes met zwarte pijlen én '❤️U Festival'. De bus rijdt tussen 12:00 en 19:00 uur richting het festival, en vanaf 21:00 uur terug richting het station."
+          },
+          {
+            "title": "Taxi + Kiss & Ride",
+            "content": "Navigeer naar Strijkviertel, De Meern (Utrecht). Volg de borden 'Kiss & Ride ❤️U Festival' zodra je in de buurt bent."
+          }
+        ]
+      },
+      {
+        "id": "lockers",
+        "title": "Lockers",
+        "content": "Op het festivalterrein zijn kluisjes aanwezig. Hier passen 3 à 4 jassen in. Je kunt je kluisje de hele dag openen en sluiten. Niet mogelijk om online te reserveren."
+      },
+      {
+        "id": "golden-glu",
+        "title": "Golden-GLU",
+        "content": "Studenten van het GLU hebben speciale privileges en zijn herkenbaar aan een gouden armbandje. Met dit armbandje kunnen ze gebruik maken van de gouden toiletten en goud gemarkeerde bestelpunten aan de bars zonder in de rij te staan."
+      },
+      {
+        "id": "faq",
+        "title": "FAQ",
+        "questions": [
+          {
+            "question": "Ik gebruik medicatie. Wat nu?",
+            "answer": "Het is toegestaan om medicijnen mee te nemen in een dagdosis. Een doktersverklaring/medicatiepaspoort is noodzakelijk. De beveiliging beoordeelt jouw documentatie. De EHBO kan je medicijnen in bewaring nemen als ze gevaarlijk zijn in combinatie met alcohol."
+          },
+          {
+            "question": "Mag ik het festivalterrein tussentijds verlaten?",
+            "answer": "Nee, dat is helaas niet mogelijk. Om de veiligheid van alle bezoekers te waarborgen, kunnen we geen uitzonderingen maken. Er zijn genoeg loungeplekken, foodstands en bars om de hele dag te kunnen genieten."
+          },
+          {
+            "question": "Zijn er lockers?",
+            "answer": "Ja! Op het terrein kun je medium en grote lockers huren."
+          }
+        ]
+      }
+    ]
+  },
+  "en": {
+    "sections": [
+      {
+        "id": "general",
+        "title": "General & Contact",
+        "content": "The ❤️U Festival is for (new) students in the Utrecht region and complements the Utrecht Introduction Time (UIT)."
+      },
+      {
+        "id": "location",
+        "title": "Location",
+        "content": "Location: Grasweide Strijkviertel, Utrecht\nNavigation address: Strijkviertelweg, Utrecht"
+      },
+      {
+        "id": "datetime",
+        "title": "Date & Opening Hours",
+        "content": "Saturday 15 August 2026 — 10:00 to 23:45\nSunday 16 August 2026 — 10:00 to 23:45"
+      },
+      {
+        "id": "transport",
+        "title": "Getting There",
+        "subsections": [
+          {
+            "title": "Bicycle",
+            "content": "There is a large free bicycle parking area where you can park your bike all day."
+          },
+          {
+            "title": "Car",
+            "content": "You can purchase a parking ticket. Parking is available at P+R Papendorp, follow the signs 'P online ticket'. Didn't buy a ticket in advance? You can purchase a parking ticket from the parking attendant on location (PIN ONLY). Note: FULL=FULL."
+          },
+          {
+            "title": "Public Transport",
+            "content": "Coming by public transport? Plan your trip via 9292.nl."
+          },
+          {
+            "title": "Shuttle Bus",
+            "content": "From Utrecht Centraal you can take the free shuttle bus to the festival grounds. You can find this bus at the Mineurslaan. Follow the white signs with black arrows and '❤️U Festival'. The bus runs between 12:00 and 19:00 towards the festival, and from 21:00 back towards the station."
+          },
+          {
+            "title": "Taxi + Kiss & Ride",
+            "content": "Navigate to Strijkviertel, De Meern (Utrecht). Follow the signs 'Kiss & Ride ❤️U Festival' once you're nearby."
+          }
+        ]
+      },
+      {
+        "id": "lockers",
+        "title": "Lockers",
+        "content": "Lockers are available on the festival grounds. They fit 3 to 4 jackets. You can open and close your locker all day. Online reservation is not possible."
+      },
+      {
+        "id": "golden-glu",
+        "title": "Golden-GLU",
+        "content": "GLU students have special privileges and are recognizable by a golden wristband. With this wristband, they can use the golden toilets and gold-marked order points at the bars without waiting in line."
+      },
+      {
+        "id": "faq",
+        "title": "FAQ",
+        "questions": [
+          {
+            "question": "I use medication. What now?",
+            "answer": "You are allowed to bring medication in a daily dose. A doctor's statement/medication passport is required. Security will assess your documentation. First aid can hold your medication if it's dangerous in combination with alcohol."
+          },
+          {
+            "question": "Can I leave the festival grounds temporarily?",
+            "answer": "No, unfortunately this is not possible. To ensure the safety of all visitors, we cannot make exceptions. There are plenty of lounge areas, food stands and bars to enjoy all day."
+          },
+          {
+            "question": "Are there lockers?",
+            "answer": "Yes! You can rent medium and large lockers on the grounds."
+          }
+        ]
+      }
+    ]
+  }
+}

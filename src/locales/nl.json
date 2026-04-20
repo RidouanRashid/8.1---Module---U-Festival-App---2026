@@ -1,0 +1,47 @@
+{
+  "nav": {
+    "home": "Home",
+    "info": "Info",
+    "schedule": "Programma",
+    "map": "Kaart"
+  },
+  "home": {
+    "welcome": "Welkom bij",
+    "festivalName": "❤️U Festival 2026",
+    "dates": "Za 15 & Zo 16 augustus 2026",
+    "location": "Grasweide Strijkviertel, Utrecht",
+    "liveNow": "Festival is nu bezig!",
+    "notStarted": "Het festival begint op 15 augustus 2026",
+    "ended": "Het festival is afgelopen. Tot volgend jaar!",
+    "news": "Nieuws"
+  },
+  "info": {
+    "title": "Festival Info"
+  },
+  "schedule": {
+    "title": "Programma",
+    "saturday": "Zaterdag",
+    "sunday": "Zondag",
+    "favorites": "Mijn favorieten",
+    "allActs": "Alle acts",
+    "noFavorites": "Je hebt nog geen favorieten. Tik op ❤️ bij een act om deze toe te voegen.",
+    "stage": "Podium",
+    "time": "Tijd",
+    "genre": "Genre",
+    "close": "Sluiten",
+    "notifyOn": "Notificaties aan",
+    "notifyOff": "Notificaties uit",
+    "notificationTitle": "⏰ {artist} begint over {minutes} minuten op {stage}!"
+  },
+  "map": {
+    "title": "Festivalkaart",
+    "myLocation": "Mijn locatie",
+    "gpsError": "GPS is niet beschikbaar. Controleer je locatie-instellingen.",
+    "gpsDenied": "Locatietoegang is geweigerd. Schakel dit in via je browserinstellingen."
+  },
+  "common": {
+    "darkMode": "Donkere modus",
+    "lightMode": "Lichte modus",
+    "language": "Taal"
+  }
+}

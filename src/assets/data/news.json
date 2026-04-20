@@ -1,0 +1,54 @@
+{
+  "nl": [
+    {
+      "id": 1,
+      "title": "❤️U Festival 2026 is bijna hier!",
+      "text": "Over een paar weken openen de poorten van het grootste studentenfestival van Utrecht. Maak je klaar voor twee onvergetelijke dagen vol muziek, entertainment en nieuwe vriendschappen!",
+      "timestamp": "2026-08-01T10:00:00"
+    },
+    {
+      "id": 2,
+      "title": "Line-up compleet: Armin van Buuren & Martin Garrix!",
+      "text": "We zijn trots om aan te kondigen dat Armin van Buuren en Martin Garrix de headliners zijn van ❤️U Festival 2026. Samen met Kensington, Within Temptation, De Staat en vele anderen wordt dit een feest om nooit te vergeten.",
+      "timestamp": "2026-08-05T14:30:00"
+    },
+    {
+      "id": 3,
+      "title": "Gratis shuttlebus vanaf Utrecht Centraal",
+      "text": "Geen zorgen over vervoer! Er rijdt een gratis shuttlebus vanaf Utrecht Centraal (Mineurslaan) naar het festivalterrein. Heen: 12:00–19:00 uur, terug: vanaf 21:00 uur.",
+      "timestamp": "2026-08-10T09:00:00"
+    },
+    {
+      "id": 4,
+      "title": "Download de ❤️U Festival App",
+      "text": "Mis geen enkel optreden! Met de officiële ❤️U Festival app heb je het complete programma, een interactieve kaart en persoonlijke notificaties altijd bij de hand. Installeer de app nu op je telefoon!",
+      "timestamp": "2026-08-12T16:00:00"
+    }
+  ],
+  "en": [
+    {
+      "id": 1,
+      "title": "❤️U Festival 2026 is almost here!",
+      "text": "In just a few weeks, the gates of Utrecht's biggest student festival will open. Get ready for two unforgettable days of music, entertainment, and new friendships!",
+      "timestamp": "2026-08-01T10:00:00"
+    },
+    {
+      "id": 2,
+      "title": "Line-up complete: Armin van Buuren & Martin Garrix!",
+      "text": "We're proud to announce that Armin van Buuren and Martin Garrix are headlining ❤️U Festival 2026. Together with Kensington, Within Temptation, De Staat and many more, this will be a party to remember.",
+      "timestamp": "2026-08-05T14:30:00"
+    },
+    {
+      "id": 3,
+      "title": "Free shuttle bus from Utrecht Centraal",
+      "text": "No transport worries! A free shuttle bus runs from Utrecht Centraal (Mineurslaan) to the festival grounds. Outbound: 12:00–19:00, return: from 21:00.",
+      "timestamp": "2026-08-10T09:00:00"
+    },
+    {
+      "id": 4,
+      "title": "Download the ❤️U Festival App",
+      "text": "Don't miss a single performance! With the official ❤️U Festival app, you'll have the complete schedule, an interactive map, and personal notifications at your fingertips. Install the app now!",
+      "timestamp": "2026-08-12T16:00:00"
+    }
+  ]
+}

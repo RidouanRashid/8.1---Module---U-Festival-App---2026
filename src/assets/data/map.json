@@ -1,0 +1,10 @@
+{
+  "center": [52.0603, 5.0530],
+  "zoom": 16,
+  "stages": [
+    { "name": "Poton", "lat": 52.0606, "lng": 5.0528, "color": "#F03228" },
+    { "name": "The Lake", "lat": 52.0601, "lng": 5.0535, "color": "#247BA0" },
+    { "name": "The Club", "lat": 52.0598, "lng": 5.0522, "color": "#E3B505" },
+    { "name": "Hanggar", "lat": 52.0610, "lng": 5.0540, "color": "#555555" }
+  ]
+}
