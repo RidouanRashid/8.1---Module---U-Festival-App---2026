@@ -10,9 +10,15 @@
           </button>
 
           <div class="modal-body">
-            <!-- Artist avatar placeholder -->
             <div class="artist-avatar" :style="{ background: stageColor }">
-              <span class="avatar-initials">{{ initials }}</span>
+              <img
+                v-if="artistImage"
+                :src="artistImage"
+                :alt="act.artist"
+                class="artist-photo"
+                loading="lazy"
+              />
+              <span v-else class="avatar-initials">{{ initials }}</span>
             </div>
 
             <h2 class="artist-name">{{ act.artist }}</h2>
@@ -65,6 +71,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useFavorites } from '../composables/useFavorites.js'
 import actsData from '../assets/data/acts.json'
+import { artistImages } from '../assets/data/media.js'
 
 const props = defineProps({
   act: Object,
@@ -109,6 +116,11 @@ const youtubeId = computed(() => {
   if (!actDetail.value || !actDetail.value.youtube) return null
   const match = actDetail.value.youtube.match(/[?&]v=([^&]+)/)
   return match ? match[1] : null
+})
+
+const artistImage = computed(() => {
+  if (!props.act) return null
+  return artistImages[props.act.id] || null
 })
 </script>
 
@@ -173,6 +185,13 @@ const youtubeId = computed(() => {
   justify-content: center;
   margin: 0 auto calc(var(--spacing) * 2);
   animation: fadeIn 0.3s ease;
+  overflow: hidden;
+}
+
+.artist-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 @keyframes fadeIn {

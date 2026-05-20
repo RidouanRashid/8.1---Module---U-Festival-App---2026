@@ -1,6 +1,8 @@
 <template>
   <div class="home-view">
     <section class="hero">
+      <img :src="heroImage" class="hero-bg" alt="Festival crowd" loading="lazy" />
+      <div class="hero-overlay"></div>
       <div class="hero-content">
         <p class="hero-welcome">{{ $t('home.welcome') }}</p>
         <h1 class="hero-title">{{ $t('home.festivalName') }}</h1>
@@ -10,6 +12,20 @@
           <span class="material-icons status-icon">{{ statusIcon }}</span>
           <span>{{ statusText }}</span>
         </div>
+      </div>
+    </section>
+
+    <section class="gallery-section">
+      <h2 class="section-title">Festival moments</h2>
+      <div class="photo-wall">
+        <img
+          v-for="(image, idx) in wallImages"
+          :key="image"
+          :src="image"
+          :alt="`Festival photo ${idx + 1}`"
+          class="wall-photo"
+          loading="lazy"
+        />
       </div>
     </section>
 
@@ -31,8 +47,10 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import newsData from '../assets/data/news.json'
+import { heroImage, festivalGallery } from '../assets/data/media.js'
 
 const { locale, t } = useI18n()
+const wallImages = festivalGallery
 
 const newsItems = computed(() => {
   const items = newsData[locale.value] || newsData.nl
@@ -91,6 +109,27 @@ function formatDate(timestamp) {
   padding: calc(var(--spacing) * 4) calc(var(--spacing) * 3);
   margin-bottom: calc(var(--spacing) * 3);
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.55), rgba(36, 123, 160, 0.48));
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-welcome {
@@ -152,6 +191,30 @@ function formatDate(timestamp) {
 
 .status-icon {
   font-size: 18px;
+}
+
+.gallery-section {
+  margin-bottom: calc(var(--spacing) * 3);
+}
+
+.photo-wall {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing);
+}
+
+.wall-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+}
+
+@media (min-width: 640px) {
+  .photo-wall {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .section-title {

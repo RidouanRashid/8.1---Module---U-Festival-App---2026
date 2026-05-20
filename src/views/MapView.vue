@@ -14,6 +14,17 @@
     </p>
 
     <div class="map-container" ref="mapContainer"></div>
+
+    <div class="map-shots" aria-label="Map screenshots">
+      <img
+        v-for="(shot, idx) in mapScreens"
+        :key="shot"
+        :src="shot"
+        :alt="`Festival map screenshot ${idx + 1}`"
+        class="map-shot"
+        loading="lazy"
+      />
+    </div>
   </div>
 </template>
 
@@ -23,11 +34,13 @@ import { useI18n } from 'vue-i18n'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import mapData from '../assets/data/map.json'
+import { mapScreenshots } from '../assets/data/media.js'
 
 const { t } = useI18n()
 
 const mapContainer = ref(null)
 const gpsError = ref('')
+const mapScreens = mapScreenshots
 let map = null
 let userMarker = null
 let watchId = null
@@ -211,6 +224,24 @@ onUnmounted(() => {
 .map-container {
   flex: 1;
   min-height: 0;
+}
+
+.map-shots {
+  display: flex;
+  gap: var(--spacing);
+  overflow-x: auto;
+  padding: calc(var(--spacing) * 1.5);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.map-shot {
+  width: 130px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
 }
 
 /* Leaflet fix for marker icons */
