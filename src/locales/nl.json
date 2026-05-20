@@ -31,6 +31,9 @@
     "close": "Sluiten",
     "notifyOn": "Notificaties aan",
     "notifyOff": "Notificaties uit",
+    "addFav": "Favoriet toevoegen",
+    "removeFav": "Favoriet",
+    "notificationBody": "⏰ {artist} begint over {minutes} minuten op {stage}!",
     "notificationTitle": "⏰ {artist} begint over {minutes} minuten op {stage}!"
   },
   "map": {

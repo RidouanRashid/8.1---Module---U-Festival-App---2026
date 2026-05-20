@@ -29,7 +29,7 @@ const navItems = [
   bottom: 0;
   left: 0;
   right: 0;
-  height: var(--nav-height);
+  height: calc(var(--nav-height) + var(--safe-bottom));
   padding-bottom: var(--safe-bottom);
   background: var(--color-base);
   border-top: 1px solid var(--color-border);

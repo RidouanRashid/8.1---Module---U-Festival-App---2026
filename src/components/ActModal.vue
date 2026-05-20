@@ -38,7 +38,7 @@
               @click="toggleFav"
             >
               <span class="fav-heart" :class="{ active: isFav }">❤️</span>
-              <span>{{ isFav ? 'Favoriet' : 'Favoriet toevoegen' }}</span>
+              <span>{{ isFav ? $t('schedule.removeFav') : $t('schedule.addFav') }}</span>
             </button>
 
             <p v-if="actDetail" class="artist-desc">{{ description }}</p>

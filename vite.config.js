@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  base: './',
   plugins: [
     vue(),
     VitePWA({
@@ -27,18 +28,10 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            urlPattern: /^https:\/\/fonts\.cdnfonts\.com\/.*/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'google-fonts-style',
-              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 }
-            }
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-webfonts',
+              cacheName: 'cdnfonts-cache',
               expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 }
             }
           },
@@ -49,8 +42,27 @@ export default defineConfig({
               cacheName: 'map-tiles-cache',
               expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 }
             }
+          },
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'images-cache',
+              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 }
+            }
+          },
+          {
+            urlPattern: /\/api\/.*/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'api-cache',
+              networkTimeoutSeconds: 10,
+              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 }
+            }
           }
-        ]
+        ],
+        navigateFallback: '/index.html',
+        navigateFallbackAllowlist: [/^(?!\/__(.*))$/]
       }
     })
   ]

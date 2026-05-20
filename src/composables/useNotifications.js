@@ -17,7 +17,7 @@ function saveScheduledNotifications(data) {
 
 const activeTimeouts = new Map()
 
-export function useNotifications() {
+export function useNotifications(getNotificationBody) {
   async function requestPermission() {
     if (!('Notification' in window)) return false
     if (Notification.permission === 'granted') return true
@@ -44,8 +44,11 @@ export function useNotifications() {
 
       if (delay > 0) {
         const timeoutId = setTimeout(() => {
+          const body = typeof getNotificationBody === 'function'
+            ? getNotificationBody(act.artist, minutes, stageName)
+            : `⏰ ${act.artist} - ${minutes} min - ${stageName}`
           new Notification('❤️U Festival', {
-            body: `⏰ ${act.artist} begint over ${minutes} minuten op ${stageName}!`,
+            body,
             icon: '/icons/icon-192.png',
             tag: key
           })

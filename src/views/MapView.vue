@@ -217,6 +217,12 @@ onUnmounted(() => {
 :deep(.stage-marker) {
   background: none !important;
   border: none !important;
+  animation: markerFadeIn 0.5s ease backwards;
+}
+
+@keyframes markerFadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 :deep(.user-marker) {

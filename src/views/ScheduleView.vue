@@ -113,7 +113,9 @@ import ActModal from '../components/ActModal.vue'
 
 const { t } = useI18n()
 const { isFavorite, toggleFavorite } = useFavorites()
-const { requestPermission, scheduleNotification, cancelNotifications } = useNotifications()
+const { requestPermission, scheduleNotification, cancelNotifications } = useNotifications(
+  (artist, minutes, stage) => t('schedule.notificationBody', { artist, minutes, stage })
+)
 
 const selectedDay = ref('saturday')
 const showFavorites = ref(false)

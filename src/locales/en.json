@@ -31,6 +31,9 @@
     "close": "Close",
     "notifyOn": "Notifications on",
     "notifyOff": "Notifications off",
+    "addFav": "Add to favorites",
+    "removeFav": "Favorited",
+    "notificationBody": "⏰ {artist} starts in {minutes} minutes at {stage}!",
     "notificationTitle": "⏰ {artist} starts in {minutes} minutes at {stage}!"
   },
   "map": {

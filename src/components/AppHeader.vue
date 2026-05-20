@@ -46,7 +46,7 @@ const currentLocale = computed(() => locale.value)
   top: 0;
   left: 0;
   right: 0;
-  height: var(--header-height);
+  height: calc(var(--header-height) + var(--safe-top));
   padding-top: var(--safe-top);
   background: var(--color-base);
   border-bottom: 1px solid var(--color-border);
