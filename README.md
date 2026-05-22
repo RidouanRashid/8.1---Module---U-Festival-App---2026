@@ -4,13 +4,13 @@ De officiële Progressive Web App voor het ❤️U Festival 2026, een tweedaags 
 
 ## Features
 
-- **4 schermen**: Home (nieuws), Info (accordion), Schedule (blokkenschema), Map (Leaflet + GPS)
+- **4 schermen**: Home (nieuws), Info (accordion), Schedule (blokkenschema), Map (OpenLayers + GPS)
 - **Tweetalig**: Nederlands / Engels met toggle
 - **Dark/Light mode**: met system-preference detectie
 - **PWA**: installeerbaar, offline bruikbaar via service worker (Workbox)
 - **Favorieten**: sla favoriete acts op in localStorage
 - **Notificaties**: Web Notifications API — herinnering 15/10/5 min voor aanvang
-- **Interactieve kaart**: Leaflet.js met OpenStreetMap, GPS-locatie, podium-markers
+- **Interactieve kaart**: OpenLayers met OpenStreetMap, GPS-locatie, podium-markers
 - **Blokkenschema**: horizontaal + verticaal scrollbaar, dag-selector, favorietenfilter, act-detail modal met YouTube embed
 
 ## Tech Stack
@@ -18,7 +18,7 @@ De officiële Progressive Web App voor het ❤️U Festival 2026, een tweedaags 
 - Vue 3 + Vite
 - vue-router (client-side routing)
 - vue-i18n (NL/EN)
-- Leaflet.js (kaart)
+- OpenLayers (kaart)
 - vite-plugin-pwa / Workbox (service worker + caching)
 - Google Fonts (Sansation) + Material Icons
 - Geen externe CSS frameworks — custom CSS met CSS custom properties

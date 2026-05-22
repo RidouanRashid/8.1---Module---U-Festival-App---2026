@@ -14,10 +14,6 @@ const image12 = new URL('../../../pictures/image (12).png', import.meta.url).hre
 const image13 = new URL('../../../pictures/image (13).png', import.meta.url).href
 const image14 = new URL('../../../pictures/image (14).png', import.meta.url).href
 
-const mapShot1 = new URL('../../../pictures/Screenshot_20250507_105416_Efteling.jpg', import.meta.url).href
-const mapShot2 = new URL('../../../pictures/Screenshot_20250507_105425_Efteling.jpg', import.meta.url).href
-const mapShot3 = new URL('../../../pictures/Screenshot_20250507_105456_Efteling.jpg', import.meta.url).href
-
 export const heroImage = image10
 
 export const artistImages = {
@@ -52,4 +48,3 @@ export const festivalGallery = [
   image14
 ]
 
-export const mapScreenshots = [mapShot1, mapShot2, mapShot3]

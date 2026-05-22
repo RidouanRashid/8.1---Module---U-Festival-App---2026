@@ -1,295 +1,212 @@
 <template>
-  <div class="map-view">
-    <div class="map-header">
-      <h1 class="page-title">{{ $t('map.title') }}</h1>
-      <button class="btn btn-accent locate-btn" @click="centerOnUser">
-        <span class="material-icons">my_location</span>
-        {{ $t('map.myLocation') }}
-      </button>
-    </div>
-
-    <p v-if="gpsError" class="gps-error">
-      <span class="material-icons gps-error-icon">location_off</span>
-      {{ gpsError }}
-    </p>
-
-    <div class="map-container" ref="mapContainer"></div>
-
-    <div class="map-shots" aria-label="Map screenshots">
-      <img
-        v-for="(shot, idx) in mapScreens"
-        :key="shot"
-        :src="shot"
-        :alt="`Festival map screenshot ${idx + 1}`"
-        class="map-shot"
-        loading="lazy"
-      />
-    </div>
-  </div>
+  <section class="map-view" aria-label="Festival map view">
+    <div ref="mapContainer" class="map-canvas" aria-label="Interactive map"></div>
+  </section>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
-import mapData from '../assets/data/map.json'
-import { mapScreenshots } from '../assets/data/media.js'
-
-const { t } = useI18n()
+import { onMounted, onUnmounted, ref } from 'vue'
+import Map from 'ol/Map'
+import View from 'ol/View'
+import Feature from 'ol/Feature'
+import Point from 'ol/geom/Point'
+import { fromLonLat } from 'ol/proj'
+import TileLayer from 'ol/layer/Tile'
+import VectorLayer from 'ol/layer/Vector'
+import OSM from 'ol/source/OSM'
+import VectorSource from 'ol/source/Vector'
+import { defaults as defaultControls } from 'ol/control'
+import { Icon, Style } from 'ol/style'
+import 'ol/ol.css'
+import { useMapStore } from '../composables/useMapStore.js'
+import { createLiveLocationSvg } from '../map/iconRegistry.js'
 
 const mapContainer = ref(null)
-const gpsError = ref('')
-const mapScreens = mapScreenshots
-let map = null
-let userMarker = null
-let watchId = null
+const mapStore = useMapStore()
 
-function createStageIcon(color) {
-  return L.divIcon({
-    className: 'stage-marker',
-    html: `<svg width="32" height="40" viewBox="0 0 32 40" xmlns="http://www.w3.org/2000/svg">
-      <path d="M16 0C7.16 0 0 7.16 0 16c0 12 16 24 16 24s16-12 16-24C32 7.16 24.84 0 16 0z" fill="${color}"/>
-      <circle cx="16" cy="16" r="8" fill="white" opacity="0.9"/>
-    </svg>`,
-    iconSize: [32, 40],
-    iconAnchor: [16, 40],
-    popupAnchor: [0, -40]
+let mapInstance = null
+let stageSource = null
+let locationWatchId = null
+let liveLocationFeature = null
+
+function createMarkerStyle(iconUrl, scale = 1) {
+  return new Style({
+    image: new Icon({
+      src: iconUrl,
+      anchor: [0.5, 1],
+      anchorXUnits: 'fraction',
+      anchorYUnits: 'fraction',
+      scale,
+      crossOrigin: 'anonymous'
+    })
   })
 }
 
-function createUserIcon() {
-  return L.divIcon({
-    className: 'user-marker',
-    html: `<div class="user-pulse"><div class="user-dot"></div></div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12]
+function buildStageFeatures() {
+  return mapStore.markers.map((marker) => {
+    const feature = new Feature({
+      geometry: new Point(fromLonLat([marker.lng, marker.lat])),
+      markerId: marker.id,
+      markerName: marker.name,
+      markerType: 'stage'
+    })
+
+    feature.setStyle(createMarkerStyle(marker.icon, 0.9))
+    return feature
   })
 }
 
-function initMap() {
-  if (!mapContainer.value) return
+function applyHoverCursor(pointerPixel) {
+  if (!mapInstance) return
 
-  map = L.map(mapContainer.value, {
-    center: mapData.center,
-    zoom: mapData.zoom,
-    zoomControl: true,
-    attributionControl: true
-  })
+  const hitFeature = mapInstance.forEachFeatureAtPixel(pointerPixel, (feature) => feature)
 
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map)
-
-  // Add stage markers
-  mapData.stages.forEach(stage => {
-    const marker = L.marker([stage.lat, stage.lng], {
-      icon: createStageIcon(stage.color)
-    }).addTo(map)
-
-    marker.bindPopup(`
-      <div style="text-align:center;font-family:Sansation,sans-serif;">
-        <strong style="color:${stage.color};font-size:1rem;">${stage.name}</strong>
-      </div>
-    `)
-  })
-
-  startGPS()
-}
-
-function startGPS() {
-  if (!('geolocation' in navigator)) {
-    gpsError.value = t('map.gpsError')
-    return
+  if (hitFeature) {
+    mapInstance.getTargetElement().style.cursor = 'pointer'
+  } else {
+    mapInstance.getTargetElement().style.cursor = ''
   }
+}
 
-  watchId = navigator.geolocation.watchPosition(
-    (pos) => {
-      gpsError.value = ''
-      const { latitude, longitude } = pos.coords
-      updateUserPosition(latitude, longitude)
-    },
-    (err) => {
-      if (err.code === 1) {
-        gpsError.value = t('map.gpsDenied')
-      } else {
-        gpsError.value = t('map.gpsError')
+function bindMapEvents() {
+  if (!mapInstance) return
+
+  mapInstance.on('singleclick', (event) => {
+    const hitFeature = mapInstance.forEachFeatureAtPixel(event.pixel, (feature) => feature)
+
+    stageSource.getFeatures().forEach((feature) => {
+      if (feature.get('markerType') === 'stage') {
+        const isSelected = hitFeature && hitFeature === feature
+        const icon = mapStore.markers.find((item) => item.id === feature.get('markerId'))?.icon
+        feature.setStyle(createMarkerStyle(icon, isSelected ? 1.05 : 0.9))
       }
+    })
+  })
+
+  mapInstance.on('pointermove', (event) => {
+    if (event.dragging) return
+    applyHoverCursor(event.pixel)
+  })
+}
+
+function startLiveLocationTracking() {
+  if (!('geolocation' in navigator) || !mapInstance || !stageSource) return
+
+  const liveLocationIcon = createLiveLocationSvg()
+
+  locationWatchId = navigator.geolocation.watchPosition(
+    (position) => {
+      const coords = fromLonLat([position.coords.longitude, position.coords.latitude])
+
+      if (!liveLocationFeature) {
+        liveLocationFeature = new Feature({
+          geometry: new Point(coords),
+          markerType: 'live-location'
+        })
+
+        liveLocationFeature.setStyle(createMarkerStyle(liveLocationIcon, 0.7))
+        stageSource.addFeature(liveLocationFeature)
+        return
+      }
+
+      liveLocationFeature.getGeometry().setCoordinates(coords)
+    },
+    () => {
+      // Keep map functional even when geolocation is denied or unavailable.
     },
     {
       enableHighAccuracy: true,
       timeout: 10000,
-      maximumAge: 10000
+      maximumAge: 5000
     }
   )
 }
 
-function updateUserPosition(lat, lng) {
-  if (!map) return
+function initializeMap() {
+  stageSource = new VectorSource({
+    features: buildStageFeatures()
+  })
 
-  if (userMarker) {
-    userMarker.setLatLng([lat, lng])
-  } else {
-    userMarker = L.marker([lat, lng], {
-      icon: createUserIcon()
-    }).addTo(map)
-  }
-}
+  const stageLayer = new VectorLayer({
+    source: stageSource,
+    updateWhileAnimating: true,
+    updateWhileInteracting: true
+  })
 
-function centerOnUser() {
-  if (!map) return
+  mapInstance = new Map({
+    target: mapContainer.value,
+    layers: [
+      new TileLayer({ source: new OSM() }),
+      stageLayer
+    ],
+    controls: defaultControls({
+      zoom: true,
+      rotate: false,
+      attribution: false
+    }),
+    view: new View({
+      center: fromLonLat([mapStore.center.value[1], mapStore.center.value[0]]),
+      zoom: mapStore.zoom.value,
+      minZoom: 12,
+      maxZoom: 19
+    })
+  })
 
-  if (userMarker) {
-    map.setView(userMarker.getLatLng(), 17)
-  } else {
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords
-        updateUserPosition(latitude, longitude)
-        map.setView([latitude, longitude], 17)
-      },
-      () => {
-        gpsError.value = t('map.gpsError')
-      },
-      { enableHighAccuracy: true, timeout: 10000 }
-    )
-  }
+  bindMapEvents()
+  startLiveLocationTracking()
 }
 
 onMounted(() => {
-  initMap()
+  initializeMap()
 })
 
 onUnmounted(() => {
-  if (watchId !== null) {
-    navigator.geolocation.clearWatch(watchId)
+  if (locationWatchId !== null) {
+    navigator.geolocation.clearWatch(locationWatchId)
   }
-  if (map) {
-    map.remove()
-    map = null
+
+  if (mapInstance) {
+    mapInstance.setTarget(undefined)
+    mapInstance = null
   }
+
+  stageSource = null
+  liveLocationFeature = null
 })
 </script>
 
 <style scoped>
 .map-view {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
   height: calc(100dvh - var(--header-height) - var(--nav-height) - var(--safe-top) - var(--safe-bottom));
   margin: calc(var(--spacing) * -2);
   margin-top: 0;
-  animation: fadeIn 0.3s ease;
+  overflow: hidden;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.map-canvas {
+  width: 100%;
+  height: 100%;
 }
 
-.map-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: calc(var(--spacing) * 2);
-  gap: var(--spacing);
+:deep(.ol-viewport) {
+  width: 100%;
+  height: 100%;
 }
 
-.map-header .page-title {
-  margin: 0;
-  font-size: 1.2rem;
-}
-
-.locate-btn {
-  font-size: 0.8rem;
-  padding: var(--spacing) calc(var(--spacing) * 1.5);
-  flex-shrink: 0;
-}
-
-.gps-error {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing);
-  padding: var(--spacing) calc(var(--spacing) * 2);
-  background: var(--color-info);
-  color: #000;
-  font-size: 0.85rem;
-  margin: 0;
-}
-
-.gps-error-icon {
-  font-size: 18px;
-}
-
-.map-container {
-  flex: 1;
-  min-height: 0;
-}
-
-.map-shots {
-  display: flex;
-  gap: var(--spacing);
-  overflow-x: auto;
-  padding: calc(var(--spacing) * 1.5);
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-border);
-}
-
-.map-shot {
-  width: 130px;
-  height: 220px;
-  object-fit: cover;
+:deep(.ol-control) {
   border-radius: var(--radius);
-  flex-shrink: 0;
-  border: 1px solid var(--color-border);
+  overflow: hidden;
 }
 
-/* Leaflet fix for marker icons */
-:deep(.stage-marker) {
-  background: none !important;
-  border: none !important;
-  animation: markerFadeIn 0.5s ease backwards;
+:deep(.ol-control button) {
+  font-style: normal;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(18, 24, 18, 0.78);
 }
 
-@keyframes markerFadeIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-:deep(.user-marker) {
-  background: none !important;
-  border: none !important;
-}
-
-:deep(.user-pulse) {
-  width: 24px;
-  height: 24px;
-  position: relative;
-}
-
-:deep(.user-dot) {
-  width: 14px;
-  height: 14px;
-  background: #4285F4;
-  border: 3px solid #fff;
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.4);
-  animation: userPulse 2s infinite;
-}
-
-@keyframes userPulse {
-  0% { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0.4); }
-  70% { box-shadow: 0 0 0 12px rgba(66, 133, 244, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(66, 133, 244, 0); }
-}
-
-/* Leaflet popup styling */
-:deep(.leaflet-popup-content-wrapper) {
-  border-radius: var(--radius);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+:deep(.ol-control button:hover) {
+  background: rgba(18, 24, 18, 0.92);
 }
 </style>
