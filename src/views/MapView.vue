@@ -1,212 +1,342 @@
 <template>
-  <section class="map-view" aria-label="Festival map view">
-    <div ref="mapContainer" class="map-canvas" aria-label="Interactive map"></div>
+  <section
+    ref="viewport"
+    class="map-view"
+    aria-label="Festival kaart"
+    @wheel.prevent="onWheel"
+    @mousedown.prevent="onMouseDown"
+    @mousemove="onMouseMove"
+    @mouseup="onPointerUp"
+    @mouseleave="onPointerUp"
+    @touchstart.passive="onTouchStart"
+    @touchmove.prevent="onTouchMove"
+    @touchend="onTouchEnd"
+  >
+    <div class="map-canvas" :style="canvasStyle">
+      <img
+        :src="mapImageUrl"
+        class="map-image"
+        alt="Festival kaart"
+        draggable="false"
+        @load="updateImageRect"
+      />
+
+      <img
+        v-for="marker in mapStore.markers"
+        :key="marker.id"
+        :src="marker.icon"
+        :alt="marker.name"
+        :class="marker.markerType === 'stage' ? 'stage-pin' : 'facility-pin'"
+        :style="coordStyle(marker.lat, marker.lng)"
+      />
+
+      <div
+        v-if="liveCoord"
+        :class="['live-dot', atFestival ? '' : 'live-dot--away']"
+        :style="coordStyle(liveCoord.lat, liveCoord.lng)"
+        :aria-label="atFestival ? 'Uw locatie' : 'GPS actief'"
+      />
+    </div>
+
+    <!-- GPS status chip -->
+    <div v-if="gpsStatus" class="gps-chip" :class="gpsStatus.cls" aria-live="polite">
+      {{ gpsStatus.label }}
+    </div>
   </section>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
-import Map from 'ol/Map'
-import View from 'ol/View'
-import Feature from 'ol/Feature'
-import Point from 'ol/geom/Point'
-import { fromLonLat } from 'ol/proj'
-import TileLayer from 'ol/layer/Tile'
-import VectorLayer from 'ol/layer/Vector'
-import OSM from 'ol/source/OSM'
-import VectorSource from 'ol/source/Vector'
-import { defaults as defaultControls } from 'ol/control'
-import { Icon, Style } from 'ol/style'
-import 'ol/ol.css'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useMapStore } from '../composables/useMapStore.js'
-import { createLiveLocationSvg } from '../map/iconRegistry.js'
 
-const mapContainer = ref(null)
+// ── Festival SVG map image ──────────────────────────────────────────────────
+const mapImageUrl = new URL('../../pictures/kaart_festival_no_markers.svg', import.meta.url).href
+
 const mapStore = useMapStore()
+const bounds   = mapStore.bounds   // { top, bottom, left, right } in lat/lng
 
-let mapInstance = null
-let stageSource = null
-let locationWatchId = null
-let liveLocationFeature = null
+// ── DOM ref + image rect ────────────────────────────────────────────────────
+const viewport  = ref(null)
+// Rendered rect of the SVG image inside the canvas (accounts for letterboxing)
+const imageRect = ref({ x: 0, y: 0, w: 0, h: 0 })
 
-function createMarkerStyle(iconUrl, scale = 1) {
-  return new Style({
-    image: new Icon({
-      src: iconUrl,
-      anchor: [0.5, 1],
-      anchorXUnits: 'fraction',
-      anchorYUnits: 'fraction',
-      scale,
-      crossOrigin: 'anonymous'
-    })
-  })
-}
+const SVG_ASPECT = 2330.58 / 1353.19   // natural width / height of the festival SVG
 
-function buildStageFeatures() {
-  return mapStore.markers.map((marker) => {
-    const feature = new Feature({
-      geometry: new Point(fromLonLat([marker.lng, marker.lat])),
-      markerId: marker.id,
-      markerName: marker.name,
-      markerType: 'stage'
-    })
-
-    feature.setStyle(createMarkerStyle(marker.icon, 0.9))
-    return feature
-  })
-}
-
-function applyHoverCursor(pointerPixel) {
-  if (!mapInstance) return
-
-  const hitFeature = mapInstance.forEachFeatureAtPixel(pointerPixel, (feature) => feature)
-
-  if (hitFeature) {
-    mapInstance.getTargetElement().style.cursor = 'pointer'
+function updateImageRect() {
+  if (!viewport.value) return
+  const cW = viewport.value.clientWidth
+  const cH = viewport.value.clientHeight
+  if (cW / cH > SVG_ASPECT) {
+    // Container wider than SVG → pillarbox (space left/right)
+    const h = cH
+    const w = h * SVG_ASPECT
+    imageRect.value = { x: (cW - w) / 2, y: 0, w, h }
   } else {
-    mapInstance.getTargetElement().style.cursor = ''
+    // Container taller than SVG → letterbox (space top/bottom)
+    const w = cW
+    const h = w / SVG_ASPECT
+    imageRect.value = { x: 0, y: (cH - h) / 2, w, h }
   }
 }
 
-function bindMapEvents() {
-  if (!mapInstance) return
-
-  mapInstance.on('singleclick', (event) => {
-    const hitFeature = mapInstance.forEachFeatureAtPixel(event.pixel, (feature) => feature)
-
-    stageSource.getFeatures().forEach((feature) => {
-      if (feature.get('markerType') === 'stage') {
-        const isSelected = hitFeature && hitFeature === feature
-        const icon = mapStore.markers.find((item) => item.id === feature.get('markerId'))?.icon
-        feature.setStyle(createMarkerStyle(icon, isSelected ? 1.05 : 0.9))
-      }
-    })
-  })
-
-  mapInstance.on('pointermove', (event) => {
-    if (event.dragging) return
-    applyHoverCursor(event.pixel)
-  })
+// ── Coordinate → CSS pixel position (inside canvas) ───────────────────────
+function coordStyle(lat, lng) {
+  const r = imageRect.value
+  if (!r.w) return { display: 'none' }
+  const px = r.x + ((lng - bounds.left)  / (bounds.right - bounds.left))  * r.w
+  const py = r.y + ((bounds.top  - lat)  / (bounds.top   - bounds.bottom)) * r.h
+  return { left: `${px}px`, top: `${py}px` }
 }
 
-function startLiveLocationTracking() {
-  if (!('geolocation' in navigator) || !mapInstance || !stageSource) return
+// ── Pan / zoom state ────────────────────────────────────────────────────────
+const scale = ref(1)
+const tx    = ref(0)
+const ty    = ref(0)
 
-  const liveLocationIcon = createLiveLocationSvg()
+const canvasStyle = computed(() => ({
+  transform:        `translate(${tx.value}px, ${ty.value}px) scale(${scale.value})`,
+  transformOrigin:  '0 0',
+}))
 
-  locationWatchId = navigator.geolocation.watchPosition(
-    (position) => {
-      const coords = fromLonLat([position.coords.longitude, position.coords.latitude])
+function clamp() {
+  if (!viewport.value) return
+  const w = viewport.value.clientWidth
+  const h = viewport.value.clientHeight
+  tx.value = Math.min(0, Math.max(tx.value, w * (1 - scale.value)))
+  ty.value = Math.min(0, Math.max(ty.value, h * (1 - scale.value)))
+}
 
-      if (!liveLocationFeature) {
-        liveLocationFeature = new Feature({
-          geometry: new Point(coords),
-          markerType: 'live-location'
-        })
+// ── Mouse wheel zoom ────────────────────────────────────────────────────────
+function onWheel(e) {
+  const rect   = viewport.value.getBoundingClientRect()
+  const cx     = e.clientX - rect.left
+  const cy     = e.clientY - rect.top
+  const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12
+  const newS   = Math.min(4, Math.max(1, scale.value * factor))
+  const ratio  = newS / scale.value
+  tx.value     = cx - ratio * (cx - tx.value)
+  ty.value     = cy - ratio * (cy - ty.value)
+  scale.value  = newS
+  clamp()
+}
 
-        liveLocationFeature.setStyle(createMarkerStyle(liveLocationIcon, 0.7))
-        stageSource.addFeature(liveLocationFeature)
-        return
-      }
+// ── Mouse drag ──────────────────────────────────────────────────────────────
+let dragging = false
+let lastX    = 0
+let lastY    = 0
 
-      liveLocationFeature.getGeometry().setCoordinates(coords)
+function onMouseDown(e) { dragging = true; lastX = e.clientX; lastY = e.clientY }
+
+function onMouseMove(e) {
+  if (!dragging) return
+  tx.value += e.clientX - lastX
+  ty.value += e.clientY - lastY
+  lastX = e.clientX
+  lastY = e.clientY
+  clamp()
+}
+
+function onPointerUp() { dragging = false }
+
+// ── Touch: pan + pinch-to-zoom ──────────────────────────────────────────────
+let activeTouches = []
+let lastTouchDist = 0
+let lastMidX      = 0
+let lastMidY      = 0
+
+function touchDist(a, b) {
+  const dx = a.clientX - b.clientX
+  const dy = a.clientY - b.clientY
+  return Math.sqrt(dx * dx + dy * dy)
+}
+
+function onTouchStart(e) {
+  activeTouches = Array.from(e.touches)
+  if (activeTouches.length === 2) {
+    lastTouchDist = touchDist(activeTouches[0], activeTouches[1])
+    lastMidX = (activeTouches[0].clientX + activeTouches[1].clientX) / 2
+    lastMidY = (activeTouches[0].clientY + activeTouches[1].clientY) / 2
+  } else {
+    lastX = activeTouches[0].clientX
+    lastY = activeTouches[0].clientY
+  }
+}
+
+function onTouchMove(e) {
+  const t = Array.from(e.touches)
+  if (t.length === 2 && activeTouches.length === 2) {
+    const dist  = touchDist(t[0], t[1])
+    const midX  = (t[0].clientX + t[1].clientX) / 2
+    const midY  = (t[0].clientY + t[1].clientY) / 2
+    const rect  = viewport.value.getBoundingClientRect()
+    const cx    = midX - rect.left
+    const cy    = midY - rect.top
+    const newS  = Math.min(4, Math.max(1, scale.value * (dist / lastTouchDist)))
+    const ratio = newS / scale.value
+    tx.value    = cx - ratio * (cx - tx.value) + (midX - lastMidX)
+    ty.value    = cy - ratio * (cy - ty.value)  + (midY - lastMidY)
+    scale.value = newS
+    lastTouchDist = dist
+    lastMidX = midX
+    lastMidY = midY
+    clamp()
+  } else if (t.length === 1) {
+    tx.value += t[0].clientX - lastX
+    ty.value += t[0].clientY - lastY
+    lastX = t[0].clientX
+    lastY = t[0].clientY
+    clamp()
+  }
+  activeTouches = t
+}
+
+function onTouchEnd(e) { activeTouches = Array.from(e.touches) }
+
+// ── Live GPS location ───────────────────────────────────────────────────────
+const liveCoord  = ref(null)   // always set when GPS fires
+const atFestival = ref(false)  // true only when physically on festival grounds
+const gpsStatus  = ref(null)
+let watchId = null
+
+// Festival centre in the SVG coordinate system — used as dot anchor when
+// the user is away so the dot is always visible on the map.
+const FEST_LAT = (bounds.top + bounds.bottom) / 2
+const FEST_LNG = (bounds.left  + bounds.right)  / 2
+
+function startLocation() {
+  if (!('geolocation' in navigator)) {
+    gpsStatus.value = { label: '📍 GPS niet beschikbaar', cls: 'gps-off' }
+    return
+  }
+  watchId = navigator.geolocation.watchPosition(
+    ({ coords }) => {
+      const { latitude: lat, longitude: lng } = coords
+      const inBounds =
+        lat >= bounds.bottom && lat <= bounds.top &&
+        lng >= bounds.left   && lng <= bounds.right
+      atFestival.value = inBounds
+      // When at festival → exact position; when away → pin at festival centre
+      liveCoord.value  = inBounds ? { lat, lng } : { lat: FEST_LAT, lng: FEST_LNG }
+      gpsStatus.value  = inBounds
+        ? { label: '📍 Jouw locatie', cls: 'gps-on' }
+        : { label: '📍 GPS actief · niet op het festival', cls: 'gps-away' }
     },
     () => {
-      // Keep map functional even when geolocation is denied or unavailable.
+      liveCoord.value  = null
+      atFestival.value = false
+      gpsStatus.value  = { label: '📍 Locatie geweigerd', cls: 'gps-off' }
     },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 5000
-    }
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 5000 }
   )
 }
 
-function initializeMap() {
-  stageSource = new VectorSource({
-    features: buildStageFeatures()
-  })
-
-  const stageLayer = new VectorLayer({
-    source: stageSource,
-    updateWhileAnimating: true,
-    updateWhileInteracting: true
-  })
-
-  mapInstance = new Map({
-    target: mapContainer.value,
-    layers: [
-      new TileLayer({ source: new OSM() }),
-      stageLayer
-    ],
-    controls: defaultControls({
-      zoom: true,
-      rotate: false,
-      attribution: false
-    }),
-    view: new View({
-      center: fromLonLat([mapStore.center.value[1], mapStore.center.value[0]]),
-      zoom: mapStore.zoom.value,
-      minZoom: 12,
-      maxZoom: 19
-    })
-  })
-
-  bindMapEvents()
-  startLiveLocationTracking()
-}
+// ── Lifecycle ───────────────────────────────────────────────────────────────
+let resizeObserver = null
 
 onMounted(() => {
-  initializeMap()
+  updateImageRect()
+  resizeObserver = new ResizeObserver(updateImageRect)
+  resizeObserver.observe(viewport.value)
+  startLocation()
 })
 
 onUnmounted(() => {
-  if (locationWatchId !== null) {
-    navigator.geolocation.clearWatch(locationWatchId)
-  }
-
-  if (mapInstance) {
-    mapInstance.setTarget(undefined)
-    mapInstance = null
-  }
-
-  stageSource = null
-  liveLocationFeature = null
+  resizeObserver?.disconnect()
+  if (watchId !== null) navigator.geolocation.clearWatch(watchId)
 })
 </script>
 
 <style scoped>
 .map-view {
+  position: relative;
   width: 100%;
   height: calc(100dvh - var(--header-height) - var(--nav-height) - var(--safe-top) - var(--safe-bottom));
   margin: calc(var(--spacing) * -2);
-  margin-top: 0;
   overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  background: #1a1a1a;
 }
+
+.map-view:active { cursor: grabbing; }
 
 .map-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  will-change: transform;
 }
 
-:deep(.ol-viewport) {
+.map-image {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
 }
 
-:deep(.ol-control) {
-  border-radius: var(--radius);
-  overflow: hidden;
+.stage-pin,
+.facility-pin {
+  position: absolute;
+  height: 36px;
+  width: auto;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.5));
 }
 
-:deep(.ol-control button) {
-  font-style: normal;
-  font-weight: 700;
-  color: #fff;
-  background: rgba(18, 24, 18, 0.78);
+.stage-pin {
+  height: 40px;
 }
 
-:deep(.ol-control button:hover) {
-  background: rgba(18, 24, 18, 0.92);
+.gps-chip {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.gps-on   { background: rgba(44, 155, 255, 0.85); color: #fff; }
+.gps-away { background: rgba(0, 0, 0, 0.55);      color: #fff; }
+.gps-off  { background: rgba(180, 0, 0, 0.65);    color: #fff; }
+
+.live-dot {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #2c9bff;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 5px rgba(44, 155, 255, 0.28);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Away from festival: hollow ring instead of solid fill */
+.live-dot--away {
+  background: transparent;
+  border: 3px solid #2c9bff;
+  box-shadow: 0 0 0 4px rgba(44, 155, 255, 0.18);
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 5px rgba(44, 155, 255, 0.28); }
+  50%       { box-shadow: 0 0 0 9px rgba(44, 155, 255, 0.10); }
 }
 </style>
