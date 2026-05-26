@@ -108,8 +108,8 @@ import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useFavorites } from '../composables/useFavorites.js'
 import { useNotifications } from '../composables/useNotifications.js'
-import scheduleData from '../assets/data/schedule.json'
 import ActModal from '../components/ActModal.vue'
+import { apiFetch } from '../composables/useApi.js'
 
 const { t } = useI18n()
 const { isFavorite, toggleFavorite } = useFavorites()
@@ -128,12 +128,20 @@ const SLOT_WIDTH = 30 // px per 15 minutes
 const START_HOUR = 10
 const END_HOUR = 24 // 23:45 rounded up
 
-const stageColors = {
-  'poton': '#F03228',
-  'the-lake': '#247BA0',
-  'the-club': '#E3B505',
-  'hanggar': '#555555'
-}
+const scheduleData = ref(null)
+
+onMounted(async () => {
+  const [schedule, map] = await Promise.all([
+    apiFetch('schedule.php'),
+    apiFetch('map.php'),
+  ])
+  scheduleData.value = schedule
+  stageColors.value = Object.fromEntries(
+    map.stages.map(s => [s.name.toLowerCase().replace(/\s+/g, '-'), s.color])
+  )
+})
+
+const stageColors = ref({})
 
 // Generate time slots from 10:00 to 23:45
 const timeSlots = computed(() => {
@@ -146,7 +154,7 @@ const timeSlots = computed(() => {
 
 const slotWidth = SLOT_WIDTH * 4 // 4 slots of 15min = 1 hour
 
-const currentDay = computed(() => scheduleData[selectedDay.value])
+const currentDay = computed(() => scheduleData.value?.[selectedDay.value])
 const currentStages = computed(() => currentDay.value?.stages || [])
 
 const hasFavoritesInDay = computed(() => {
@@ -156,7 +164,7 @@ const hasFavoritesInDay = computed(() => {
 })
 
 function stageColor(stageId) {
-  return stageColors[stageId] || '#555'
+  return stageColors.value[stageId] || '#555'
 }
 
 function timeToMinutes(timeStr) {
@@ -174,7 +182,7 @@ function actStyle(act, stageId) {
   return {
     left: left + 'px',
     width: Math.max(width - 2, SLOT_WIDTH) + 'px',
-    backgroundColor: stageColors[stageId] || '#555'
+    backgroundColor: stageColors.value[stageId] || '#555'
   }
 }
 
@@ -211,15 +219,6 @@ onMounted(async () => {
 <style scoped>
 .schedule-view {
   animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.page-title {
-  margin-bottom: calc(var(--spacing) * 2);
 }
 
 .day-selector {
@@ -373,13 +372,6 @@ onMounted(async () => {
 
 .act-fav-heart.active {
   animation: heartBounce 0.4s ease;
-}
-
-@keyframes heartBounce {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.4); }
-  60% { transform: scale(0.9); }
-  100% { transform: scale(1); }
 }
 
 .act-artist {

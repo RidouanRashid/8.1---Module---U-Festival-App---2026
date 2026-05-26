@@ -67,7 +67,6 @@ const navItems = [
 }
 
 .nav-label {
-  font-family: 'Sansation', sans-serif;
   font-weight: 300;
   font-style: italic;
   font-size: 0.7rem;

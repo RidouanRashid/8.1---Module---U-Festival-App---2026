@@ -53,6 +53,11 @@
         "content": "Studenten van het GLU hebben speciale privileges en zijn herkenbaar aan een gouden armbandje. Met dit armbandje kunnen ze gebruik maken van de gouden toiletten en goud gemarkeerde bestelpunten aan de bars zonder in de rij te staan."
       },
       {
+        "id": "emergency",
+        "title": "Noodcontacten & Veiligheid",
+        "content": "🚨 Spoedeisende hulp: bel 112\n\n🚔 Politie (niet-spoed): bel 0900-8844\n\n🏥 EHBO op het festival: zichtbaar aangegeven op het terrein met groen kruis borden — zie ook de kaart in de app.\n\n🔒 Festivalbeveiliging: spreek elk teamlid aan in een geel hesje, of ga naar de infostand bij de hoofdingang.\n\n📱 Heb je iemand kwijt? Ga naar de infostand bij de hoofdingang. Verloren voorwerpen worden daar bewaard."
+      },
+      {
         "id": "faq",
         "title": "FAQ",
         "questions": [
@@ -124,6 +129,11 @@
         "id": "golden-glu",
         "title": "Golden-GLU",
         "content": "GLU students have special privileges and are recognizable by a golden wristband. With this wristband, they can use the golden toilets and gold-marked order points at the bars without waiting in line."
+      },
+      {
+        "id": "emergency",
+        "title": "Emergency Contacts & Safety",
+        "content": "🚨 Emergency services: call 112\n\n🚔 Police (non-emergency): call 0900-8844\n\n🏥 First Aid on site: clearly marked with green cross signs across the grounds — also visible on the in-app map.\n\n🔒 Festival security: approach any team member in a yellow vest, or visit the info desk at the main entrance.\n\n📱 Lost someone? Head to the info desk at the main entrance. Lost property is kept there."
       },
       {
         "id": "faq",

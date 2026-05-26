@@ -62,16 +62,21 @@
 </template>
 
 <script setup>
-import { reactive, computed } from 'vue'
+import { ref, reactive, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import infoData from '../assets/data/info.json'
+import { apiFetch } from '../composables/useApi.js'
 
 const { locale } = useI18n()
 
-const sections = computed(() => {
-  const data = infoData[locale.value] || infoData.nl
-  return data.sections
-})
+const sections = ref([])
+
+async function loadInfo() {
+  const data = await apiFetch(`info.php?lang=${locale.value}`)
+  sections.value = data.sections
+}
+
+onMounted(loadInfo)
+watch(locale, loadInfo)
 
 const openSections = reactive({})
 const openFaqs = reactive({})
@@ -92,11 +97,6 @@ function formatContent(content) {
 <style scoped>
 .info-view {
   animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .page-title {

@@ -4,6 +4,15 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   base: './',
+  server: {
+    proxy: {
+      // Forward /api/* from the Vite dev server (port 5173) to XAMPP (port 80)
+      '/api': {
+        target: 'http://localhost/8.1 - Module - U Festival App - 2026',
+        changeOrigin: true,
+      },
+    },
+  },
   plugins: [
     vue(),
     VitePWA({
@@ -25,8 +34,8 @@ export default defineConfig({
         ]
       },
       workbox: {
+        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],
-        maximumFileSizeToCacheInBytes: 12 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.cdnfonts\.com\/.*/i,
@@ -34,14 +43,6 @@ export default defineConfig({
             options: {
               cacheName: 'cdnfonts-cache',
               expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 }
-            }
-          },
-          {
-            urlPattern: /^https:\/\/tile\.openstreetmap\.org\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'map-tiles-cache',
-              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 }
             }
           },
           {

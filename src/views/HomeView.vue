@@ -44,18 +44,22 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import newsData from '../assets/data/news.json'
+import { apiFetch } from '../composables/useApi.js'
 import { heroImage, festivalGallery } from '../assets/data/media.js'
 
 const { locale, t } = useI18n()
 const wallImages = festivalGallery
 
-const newsItems = computed(() => {
-  const items = newsData[locale.value] || newsData.nl
-  return [...items].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-})
+const newsItems = ref([])
+
+async function loadNews() {
+  newsItems.value = await apiFetch(`news.php?lang=${locale.value}`)
+}
+
+onMounted(loadNews)
+watch(locale, loadNews)
 
 const festivalStart = new Date('2026-08-15T10:00:00')
 const festivalEnd = new Date('2026-08-16T23:45:00')
@@ -95,11 +99,6 @@ function formatDate(timestamp) {
 <style scoped>
 .home-view {
   animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .hero {

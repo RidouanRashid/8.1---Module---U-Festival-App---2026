@@ -222,9 +222,10 @@ function startLocation() {
         : { label: '📍 GPS actief · niet op het festival', cls: 'gps-away' }
     },
     () => {
-      liveCoord.value  = null
+      // Still show dot at festival centre even when permission is denied
+      liveCoord.value  = { lat: FEST_LAT, lng: FEST_LNG }
       atFestival.value = false
-      gpsStatus.value  = { label: '📍 Locatie geweigerd', cls: 'gps-off' }
+      gpsStatus.value  = { label: '📍 Locatie geweigerd · GPS uitgeschakeld', cls: 'gps-off' }
     },
     { enableHighAccuracy: true, timeout: 10000, maximumAge: 5000 }
   )
@@ -325,18 +326,19 @@ onUnmounted(() => {
   box-shadow: 0 0 0 5px rgba(44, 155, 255, 0.28);
   transform: translate(-50%, -50%);
   pointer-events: none;
+  z-index: 20;
   animation: pulse 2s ease-in-out infinite;
 }
 
-/* Away from festival: hollow ring instead of solid fill */
+/* Away from festival or GPS denied: semi-transparent dot at festival centre */
 .live-dot--away {
-  background: transparent;
-  border: 3px solid #2c9bff;
-  box-shadow: 0 0 0 4px rgba(44, 155, 255, 0.18);
+  background: rgba(44, 155, 255, 0.45);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 5px rgba(44, 155, 255, 0.22);
 }
 
 @keyframes pulse {
   0%, 100% { box-shadow: 0 0 0 5px rgba(44, 155, 255, 0.28); }
-  50%       { box-shadow: 0 0 0 9px rgba(44, 155, 255, 0.10); }
+  50%       { box-shadow: 0 0 0 10px rgba(44, 155, 255, 0.12); }
 }
 </style>

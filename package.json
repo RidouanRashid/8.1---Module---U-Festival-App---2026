@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/RidouanRashid/8.1---Module---U-Festival-App---2026#readme",
   "dependencies": {
+    "leaflet": "^1.9.4",
     "vue": "^3.5.32",
     "vue-i18n": "^11.3.2",
     "vue-router": "^5.0.4"

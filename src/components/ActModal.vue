@@ -67,10 +67,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useFavorites } from '../composables/useFavorites.js'
-import actsData from '../assets/data/acts.json'
+import { apiFetch } from '../composables/useApi.js'
 import { artistImages } from '../assets/data/media.js'
 
 const props = defineProps({
@@ -100,10 +100,15 @@ const initials = computed(() => {
     .slice(0, 2)
 })
 
-const actDetail = computed(() => {
-  if (!props.act) return null
-  return actsData.find(a => a.id === props.act.id)
-})
+const actDetail = ref(null)
+
+watch(
+  () => props.act,
+  async act => {
+    actDetail.value = act ? await apiFetch(`acts.php?id=${act.id}`).catch(() => null) : null
+  },
+  { immediate: true }
+)
 
 const description = computed(() => {
   if (!actDetail.value) return ''
@@ -114,7 +119,8 @@ const description = computed(() => {
 
 const youtubeId = computed(() => {
   if (!actDetail.value || !actDetail.value.youtube) return null
-  const match = actDetail.value.youtube.match(/[?&]v=([^&]+)/)
+  // Supports: youtube.com/watch?v=ID  youtube.com/embed/ID  youtu.be/ID
+  const match = actDetail.value.youtube.match(/(?:[?&]v=|youtu\.be\/|embed\/)([^&?#\s]+)/)
   return match ? match[1] : null
 })
 
@@ -184,7 +190,7 @@ const artistImage = computed(() => {
   align-items: center;
   justify-content: center;
   margin: 0 auto calc(var(--spacing) * 2);
-  animation: fadeIn 0.3s ease;
+  animation: avatarPop 0.3s ease;
   overflow: hidden;
 }
 
@@ -194,9 +200,9 @@ const artistImage = computed(() => {
   object-fit: cover;
 }
 
-@keyframes fadeIn {
+@keyframes avatarPop {
   from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 .avatar-initials {
@@ -243,13 +249,6 @@ const artistImage = computed(() => {
 
 .fav-heart.active {
   animation: heartBounce 0.4s ease;
-}
-
-@keyframes heartBounce {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.3); }
-  60% { transform: scale(0.9); }
-  100% { transform: scale(1); }
 }
 
 .artist-desc {
