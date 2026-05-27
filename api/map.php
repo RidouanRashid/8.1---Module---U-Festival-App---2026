@@ -14,10 +14,20 @@ while ($row = mysqli_fetch_assoc($result)) {
     ];
 }
 
+$fResult = mysqli_query($conn, 'SELECT type, lat, lng FROM map_facilities ORDER BY sort_order');
+$facilities = [];
+while ($row = mysqli_fetch_assoc($fResult)) {
+    $facilities[] = [
+        'type' => $row['type'],
+        'lat'  => (float) $row['lat'],
+        'lng'  => (float) $row['lng'],
+    ];
+}
+
 jsonResponse([
     'center'     => [(float) $cfg['center_lat'], (float) $cfg['center_lng']],
     'zoom'       => (int) $cfg['zoom_level'],
     'bounds'     => ['top' => 52.0630, 'bottom' => 52.0578, 'left' => 5.0490, 'right' => 5.0568],
     'stages'     => $stages,
-    'facilities' => [],
+    'facilities' => $facilities,
 ]);

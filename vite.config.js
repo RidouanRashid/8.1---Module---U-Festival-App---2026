@@ -22,15 +22,16 @@ export default defineConfig({
         name: '❤️U Festival 2026',
         short_name: '❤️U Festival',
         description: 'De officiële app voor het ❤️U Festival 2026 in Utrecht',
-        start_url: '/',
+        start_url: './',
         display: 'standalone',
         background_color: '#000000',
         theme_color: '#F03228',
+        scope: './',
         orientation: 'portrait',
         icons: [
-          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+          { src: './icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: './icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: './icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
         ]
       },
       workbox: {

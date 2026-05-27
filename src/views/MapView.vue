@@ -38,6 +38,18 @@
       />
     </div>
 
+    <!-- Zoom controls -->
+    <div class="map-controls" @mousedown.stop @touchstart.stop>
+      <button class="map-btn map-btn--icon" aria-label="Naar home" @click="goHome">
+        <span class="material-icons">home</span>
+      </button>
+      <button class="map-btn" aria-label="Inzoomen" @click="zoomIn">+</button>
+      <button class="map-btn" aria-label="Uitzoomen" @click="zoomOut">−</button>
+      <button class="map-btn map-btn--icon" aria-label="Kaart terugzetten" @click="resetView">
+        <span class="material-icons">center_focus_strong</span>
+      </button>
+    </div>
+
     <!-- GPS status chip -->
     <div v-if="gpsStatus" class="gps-chip" :class="gpsStatus.cls" aria-live="polite">
       {{ gpsStatus.label }}
@@ -47,12 +59,14 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useMapStore } from '../composables/useMapStore.js'
 
 // ── Festival SVG map image ──────────────────────────────────────────────────
 const mapImageUrl = new URL('../../pictures/kaart_festival_no_markers.svg', import.meta.url).href
 
 const mapStore = useMapStore()
+const router = useRouter()
 const bounds   = mapStore.bounds   // { top, bottom, left, right } in lat/lng
 
 // ── DOM ref + image rect ────────────────────────────────────────────────────
@@ -67,15 +81,15 @@ function updateImageRect() {
   const cW = viewport.value.clientWidth
   const cH = viewport.value.clientHeight
   if (cW / cH > SVG_ASPECT) {
-    // Container wider than SVG → pillarbox (space left/right)
-    const h = cH
-    const w = h * SVG_ASPECT
-    imageRect.value = { x: (cW - w) / 2, y: 0, w, h }
-  } else {
-    // Container taller than SVG → letterbox (space top/bottom)
+    // Cover mode: match width, crop top/bottom when needed.
     const w = cW
     const h = w / SVG_ASPECT
     imageRect.value = { x: 0, y: (cH - h) / 2, w, h }
+  } else {
+    // Cover mode: match height, crop left/right when needed.
+    const h = cH
+    const w = h * SVG_ASPECT
+    imageRect.value = { x: (cW - w) / 2, y: 0, w, h }
   }
 }
 
@@ -192,6 +206,24 @@ function onTouchMove(e) {
 
 function onTouchEnd(e) { activeTouches = Array.from(e.touches) }
 
+// ── Zoom button helpers ─────────────────────────────────────────────────────
+function zoomStep(factor) {
+  if (!viewport.value) return
+  const cx = viewport.value.clientWidth  / 2
+  const cy = viewport.value.clientHeight / 2
+  const newS = Math.min(4, Math.max(1, scale.value * factor))
+  const ratio = newS / scale.value
+  tx.value    = cx - ratio * (cx - tx.value)
+  ty.value    = cy - ratio * (cy - ty.value)
+  scale.value = newS
+  clamp()
+}
+
+function zoomIn()    { zoomStep(1.4) }
+function zoomOut()   { zoomStep(1 / 1.4) }
+function resetView() { scale.value = 1; tx.value = 0; ty.value = 0 }
+function goHome()    { router.push('/') }
+
 // ── Live GPS location ───────────────────────────────────────────────────────
 const liveCoord  = ref(null)   // always set when GPS fires
 const atFestival = ref(false)  // true only when physically on festival grounds
@@ -250,9 +282,11 @@ onUnmounted(() => {
 <style scoped>
 .map-view {
   position: relative;
+  --map-ui-pad: 10px;
+  --map-btn-size: 48px;
+  --map-btn-radius: 14px;
   width: 100%;
-  height: calc(100dvh - var(--header-height) - var(--nav-height) - var(--safe-top) - var(--safe-bottom));
-  margin: calc(var(--spacing) * -2);
+  height: 100dvh;
   overflow: hidden;
   cursor: grab;
   touch-action: none;
@@ -278,7 +312,7 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
   pointer-events: none;
 }
@@ -294,28 +328,73 @@ onUnmounted(() => {
 }
 
 .stage-pin {
-  height: 40px;
+  height: 44px;
 }
 
+/* ── Zoom controls ─────────────────────────────────────── */
+.map-controls {
+  position: absolute;
+  right: var(--map-ui-pad);
+  bottom: var(--map-ui-pad);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+
+.map-btn {
+  width: var(--map-btn-size);
+  height: var(--map-btn-size);
+  border-radius: var(--map-btn-radius);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(14, 14, 14, 0.78);
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+}
+
+.map-btn:active {
+  transform: scale(0.92);
+  opacity: 0.85;
+}
+
+.map-btn--icon .material-icons {
+  font-size: 22px;
+}
+
+/* ── GPS chip ──────────────────────────────────────────── */
 .gps-chip {
   position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 4px 12px;
+  top: var(--map-ui-pad);
+  left: var(--map-ui-pad);
+  right: calc(var(--map-btn-size) + (var(--map-ui-pad) * 2) + 8px);
+  padding: 8px 12px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  white-space: nowrap;
+  line-height: 1.25;
   pointer-events: none;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  text-align: left;
 }
 
 .gps-on   { background: rgba(44, 155, 255, 0.85); color: #fff; }
 .gps-away { background: rgba(0, 0, 0, 0.55);      color: #fff; }
 .gps-off  { background: rgba(180, 0, 0, 0.65);    color: #fff; }
 
+/* ── Live location dot ─────────────────────────────────── */
 .live-dot {
   position: absolute;
   width: 18px;
@@ -330,7 +409,6 @@ onUnmounted(() => {
   animation: pulse 2s ease-in-out infinite;
 }
 
-/* Away from festival or GPS denied: semi-transparent dot at festival centre */
 .live-dot--away {
   background: rgba(44, 155, 255, 0.45);
   border: 3px solid #ffffff;
@@ -340,5 +418,40 @@ onUnmounted(() => {
 @keyframes pulse {
   0%, 100% { box-shadow: 0 0 0 5px rgba(44, 155, 255, 0.28); }
   50%       { box-shadow: 0 0 0 10px rgba(44, 155, 255, 0.12); }
+}
+
+/* ── Small phones (<380px) ─────────────────────────────── */
+@media (max-width: 380px) {
+  .map-view {
+    --map-ui-pad: 8px;
+    --map-btn-size: 42px;
+  }
+
+  .stage-pin    { height: 36px; }
+  .facility-pin { height: 30px; }
+  .map-btn      { font-size: 20px; }
+}
+
+@media (min-width: 900px) {
+  .map-view {
+    --map-ui-pad: 12px;
+    --map-btn-size: 44px;
+    --map-btn-radius: 10px;
+  }
+
+  .map-controls {
+    top: var(--map-ui-pad);
+    bottom: auto;
+  }
+
+  .gps-chip {
+    top: auto;
+    left: 50%;
+    right: auto;
+    bottom: 12px;
+    transform: translateX(-50%);
+    max-width: calc(100% - 24px);
+    text-align: center;
+  }
 }
 </style>

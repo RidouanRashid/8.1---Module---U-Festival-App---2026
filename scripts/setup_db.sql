@@ -6,7 +6,26 @@
 
 USE u_festival;
 
+-- Create map_facilities table if it doesn't exist
+CREATE TABLE IF NOT EXISTS map_facilities (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type VARCHAR(50) NOT NULL,
+    lat DECIMAL(10,7) NOT NULL,
+    lng DECIMAL(10,7) NOT NULL,
+    sort_order INT DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS ui_translations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    lang VARCHAR(5) NOT NULL,
+    key_path VARCHAR(120) NOT NULL,
+    text_value TEXT NOT NULL,
+    UNIQUE KEY uq_ui_translations_lang_key (lang, key_path)
+);
+
 -- Clear existing data
+DELETE FROM ui_translations;
+DELETE FROM map_facilities;
 DELETE FROM schedule_acts;
 DELETE FROM schedule_stages;
 DELETE FROM schedule_days;
@@ -41,6 +60,17 @@ INSERT INTO map_stages (stage_name, lat, lng, color, sort_order) VALUES
 ('The Lake', 52.0601000, 5.0535000, '#247BA0', 2),
 ('The Club', 52.0598000, 5.0522000, '#E3B505', 3),
 ('Hanggar',  52.0610000, 5.0540000, '#555555', 4);
+
+-- map_facilities
+INSERT INTO map_facilities (type, lat, lng, sort_order) VALUES
+('entrance_exit', 52.0617000, 5.0556000, 1),
+('bar',           52.0609000, 5.0523000, 2),
+('food',          52.0605000, 5.0529000, 3),
+('first_aid',     52.0608000, 5.0533000, 4),
+('toilet',        52.0608000, 5.0517000, 5),
+('locker',        52.0614000, 5.0546000, 6),
+('merchandise',   52.0607000, 5.0527000, 7),
+('ice_cream',     52.0606000, 5.0531000, 8);
 
 -- schedule_days
 INSERT INTO schedule_days (day_key, event_date) VALUES ('saturday','2026-08-15'),('sunday','2026-08-16');
@@ -158,3 +188,79 @@ INSERT INTO info_faq (section_key, lang, question, answer, sort_order) VALUES
 ('faq','en','I use medication. What now?','Medication in a daily dose is permitted. A doctor''s statement is required.',1),
 ('faq','en','Can I leave the festival grounds during the event?','No, unfortunately that is not possible.',2),
 ('faq','en','Are there lockers?','Yes! You can rent medium and large lockers on the grounds.',3);
+
+-- ui_translations (replaces src/locales/*.json)
+INSERT INTO ui_translations (lang, key_path, text_value) VALUES
+('nl','nav.home','Home'),
+('nl','nav.info','Info'),
+('nl','nav.schedule','Programma'),
+('nl','nav.map','Kaart'),
+('nl','home.welcome','Welkom bij'),
+('nl','home.festivalName','U Festival 2026'),
+('nl','home.dates','Za 15 & Zo 16 augustus 2026'),
+('nl','home.location','Grasweide Strijkviertel, Utrecht'),
+('nl','home.liveNow','Festival is nu bezig!'),
+('nl','home.notStarted','Het festival begint op 15 augustus 2026'),
+('nl','home.ended','Het festival is afgelopen. Tot volgend jaar!'),
+('nl','home.news','Nieuws'),
+('nl','info.title','Festival Info'),
+('nl','schedule.title','Programma'),
+('nl','schedule.saturday','Zaterdag'),
+('nl','schedule.sunday','Zondag'),
+('nl','schedule.favorites','Mijn favorieten'),
+('nl','schedule.allActs','Alle acts'),
+('nl','schedule.noFavorites','Je hebt nog geen favorieten. Tik op het hartje bij een act om deze toe te voegen.'),
+('nl','schedule.stage','Podium'),
+('nl','schedule.time','Tijd'),
+('nl','schedule.genre','Genre'),
+('nl','schedule.close','Sluiten'),
+('nl','schedule.notifyOn','Notificaties aan'),
+('nl','schedule.notifyOff','Notificaties uit'),
+('nl','schedule.addFav','Favoriet toevoegen'),
+('nl','schedule.removeFav','Favoriet'),
+('nl','schedule.notificationBody','{artist} begint over {minutes} minuten op {stage}!'),
+('nl','schedule.notificationTitle','{artist} begint over {minutes} minuten op {stage}!'),
+('nl','map.title','Festivalkaart'),
+('nl','map.myLocation','Mijn locatie'),
+('nl','map.gpsError','GPS is niet beschikbaar. Controleer je locatie-instellingen.'),
+('nl','map.gpsDenied','Locatietoegang is geweigerd. Schakel dit in via je browserinstellingen.'),
+('nl','common.darkMode','Donkere modus'),
+('nl','common.lightMode','Lichte modus'),
+('nl','common.language','Taal'),
+('en','nav.home','Home'),
+('en','nav.info','Info'),
+('en','nav.schedule','Schedule'),
+('en','nav.map','Map'),
+('en','home.welcome','Welcome to'),
+('en','home.festivalName','U Festival 2026'),
+('en','home.dates','Sat 15 & Sun 16 August 2026'),
+('en','home.location','Grasweide Strijkviertel, Utrecht'),
+('en','home.liveNow','Festival is live now!'),
+('en','home.notStarted','The festival starts on August 15, 2026'),
+('en','home.ended','The festival has ended. See you next year!'),
+('en','home.news','News'),
+('en','info.title','Festival Info'),
+('en','schedule.title','Schedule'),
+('en','schedule.saturday','Saturday'),
+('en','schedule.sunday','Sunday'),
+('en','schedule.favorites','My favorites'),
+('en','schedule.allActs','All acts'),
+('en','schedule.noFavorites','No favorites yet. Tap the heart on an act to add it.'),
+('en','schedule.stage','Stage'),
+('en','schedule.time','Time'),
+('en','schedule.genre','Genre'),
+('en','schedule.close','Close'),
+('en','schedule.notifyOn','Notifications on'),
+('en','schedule.notifyOff','Notifications off'),
+('en','schedule.addFav','Add to favorites'),
+('en','schedule.removeFav','Favorited'),
+('en','schedule.notificationBody','{artist} starts in {minutes} minutes at {stage}!'),
+('en','schedule.notificationTitle','{artist} starts in {minutes} minutes at {stage}!'),
+('en','map.title','Festival Map'),
+('en','map.myLocation','My location'),
+('en','map.gpsError','GPS is not available. Check your location settings.'),
+('en','map.gpsDenied','Location access was denied. Enable it in your browser settings.'),
+('en','common.darkMode','Dark mode'),
+('en','common.lightMode','Light mode'),
+('en','common.language','Language')
+ON DUPLICATE KEY UPDATE text_value = VALUES(text_value);

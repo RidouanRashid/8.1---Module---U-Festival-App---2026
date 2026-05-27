@@ -1,19 +1,19 @@
 <template>
   <div :data-theme="theme">
-    <AppHeader @toggle-theme="toggleTheme" @toggle-lang="toggleLang" :theme="theme" />
-    <main class="page-content">
+    <AppHeader v-if="!isMapRoute" @toggle-theme="toggleTheme" @toggle-lang="toggleLang" :theme="theme" />
+    <main class="page-content" :class="{ 'page-content--map': isMapRoute }">
       <router-view v-slot="{ Component, route }">
         <transition :name="transitionName">
           <component :is="Component" :key="route.path" />
         </transition>
       </router-view>
     </main>
-    <BottomNav />
+    <BottomNav v-if="!isMapRoute" />
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import AppHeader from './components/AppHeader.vue'
@@ -22,6 +22,7 @@ import BottomNav from './components/BottomNav.vue'
 const route = useRoute()
 const { locale } = useI18n()
 const transitionName = ref('slide-left')
+const isMapRoute = computed(() => route.path === '/map')
 
 const routeOrder = { '/': 0, '/info': 1, '/schedule': 2, '/map': 3 }
 
