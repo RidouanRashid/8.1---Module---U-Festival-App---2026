@@ -75,8 +75,8 @@ export async function apiFetch(endpoint) {
     try {
       const fallback = await loadFromFallback(endpoint)
       if (fallback !== null) return fallback
-    } catch (fallbackError) {
-      console.error('JSON fallback failed:', fallbackError)
+    } catch {
+      // ignore fallback read errors and surface the original API error below
     }
     throw apiError
   }

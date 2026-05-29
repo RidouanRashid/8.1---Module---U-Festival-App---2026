@@ -13,8 +13,8 @@ async function loadMessages() {
   try {
     const data = await apiFetch('locales.php')
     if (data?.nl && data?.en) return data
-  } catch (err) {
-    console.error('Failed to load locales from API:', err)
+  } catch {
+    // fall back to empty locales
   }
   return { nl: {}, en: {} }
 }
