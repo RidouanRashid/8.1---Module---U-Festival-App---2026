@@ -20,53 +20,73 @@ export default defineConfig({
       devOptions: {
         enabled: true,
       },
-      includeAssets: ['favicon.svg', 'robots.txt', 'icons/*.png'],
+      includeAssets: ['favicon.svg', 'robots.txt', 'icons/*.png', 'screenshots/*.jpg'],
       manifest: {
+        id: '/',
         name: '❤️U Festival 2026',
         short_name: '❤️U Festival',
         description: 'De officiële app voor het ❤️U Festival 2026 in Utrecht',
-        start_url: './',
-        scope: './',
+        start_url: '/',
+        scope: '/',
         display: 'standalone',
         display_override: ['standalone', 'minimal-ui'],
-        background_color: '#000000',
+        background_color: '#F03228',
         theme_color: '#F03228',
         orientation: 'portrait',
         lang: 'nl',
         dir: 'ltr',
         categories: ['entertainment', 'lifestyle', 'social'],
+        prefer_related_applications: false,
         icons: [
-          { src: './icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
-          { src: './icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
-          { src: './icons/icon-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+          { src: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-maskable-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+        ],
+        screenshots: [
+          {
+            src: '/screenshots/screenshot-mobile.jpg',
+            sizes: '390x844',
+            type: 'image/jpeg',
+            form_factor: 'narrow',
+            label: '❤️U Festival App'
+          },
+          {
+            src: '/screenshots/screenshot-desktop.jpg',
+            sizes: '1280x800',
+            type: 'image/jpeg',
+            form_factor: 'wide',
+            label: '❤️U Festival App'
+          }
         ],
         shortcuts: [
           {
             name: 'Programma',
             short_name: 'Programma',
             description: 'Bekijk het festivalprogramma',
-            url: './#/schedule',
-            icons: [{ src: './icons/icon-192x192.png', sizes: '192x192' }]
+            url: '/#/schedule',
+            icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' }]
           },
           {
             name: 'Kaart',
             short_name: 'Kaart',
             description: 'Open de festivalkaart',
-            url: './#/map',
-            icons: [{ src: './icons/icon-192x192.png', sizes: '192x192' }]
+            url: '/#/map',
+            icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' }]
           },
           {
             name: 'Info',
             short_name: 'Info',
             description: 'Praktische informatie',
-            url: './#/info',
-            icons: [{ src: './icons/icon-192x192.png', sizes: '192x192' }]
+            url: '/#/info',
+            icons: [{ src: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' }]
           }
         ]
       },
       workbox: {
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
         maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,woff2}'],
+        globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg,json,woff2}'],
         runtimeCaching: [
           {
             // Cache Google Fonts stylesheets (Material Icons)
@@ -74,7 +94,8 @@ export default defineConfig({
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'google-fonts-stylesheets',
-              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 }
+              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              cacheableResponse: { statuses: [0, 200] }
             }
           },
           {
@@ -89,10 +110,11 @@ export default defineConfig({
           },
           {
             urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
-            handler: 'StaleWhileRevalidate',
+            handler: 'CacheFirst',
             options: {
               cacheName: 'images-cache',
-              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 }
+              expiration: { maxEntries: 60, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] }
             }
           },
           {
