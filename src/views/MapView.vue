@@ -69,7 +69,7 @@
       {{ gpsStatus.label }}
     </div>
 
-    <aside v-if="selectedMarker" class="marker-panel" @mousedown.stop @touchstart.stop>
+    <aside v-if="selectedMarker" class="marker-panel" @mousedown.stop @touchstart.stop @touchmove.stop>
       <div class="marker-panel-head">
         <h3>{{ markerLabel(selectedMarker) }}</h3>
         <button class="marker-close" aria-label="Close marker info" @click="selectedMarker = null">

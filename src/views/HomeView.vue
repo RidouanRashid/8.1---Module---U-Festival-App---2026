@@ -73,8 +73,8 @@ async function loadNews() {
 onMounted(loadNews)
 watch(locale, loadNews)
 
-const festivalStart = new Date('2026-08-15T10:00:00')
-const festivalEnd = new Date('2026-08-16T23:45:00')
+const festivalStart = new Date('2026-08-05T10:00:00')
+const festivalEnd = new Date('2026-08-06T23:45:00')
 
 const statusClass = computed(() => {
   const now = new Date()
