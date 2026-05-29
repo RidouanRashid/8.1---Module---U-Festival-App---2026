@@ -1,7 +1,14 @@
 <template>
   <div class="home-view">
     <section class="hero">
-      <img :src="heroImage" class="hero-bg" alt="Festival crowd" loading="lazy" />
+      <img
+        :src="heroImage"
+        class="hero-bg"
+        alt="Festival crowd"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
       <div class="hero-overlay"></div>
       <div class="hero-content">
         <p class="hero-welcome">{{ $t('home.welcome') }}</p>
@@ -25,6 +32,7 @@
           :alt="`Festival photo ${idx + 1}`"
           class="wall-photo"
           loading="lazy"
+          decoding="async"
         />
       </div>
     </section>
@@ -47,10 +55,10 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { apiFetch } from '../composables/useApi.js'
-import { heroImage, festivalGallery } from '../assets/data/media.js'
+import { heroImage, homeGallery } from '../assets/data/media.js'
 
 const { locale, t } = useI18n()
-const wallImages = festivalGallery
+const wallImages = homeGallery
 
 const newsItems = ref([])
 
@@ -135,7 +143,7 @@ function formatDate(timestamp) {
   font-weight: 300;
   font-style: italic;
   font-size: 0.9rem;
-  opacity: 0.8;
+  opacity: 0.95;
   margin-bottom: var(--spacing);
 }
 
@@ -153,7 +161,7 @@ function formatDate(timestamp) {
 
 .hero-location {
   font-size: 0.85rem;
-  opacity: 0.7;
+  opacity: 0.9;
   margin-bottom: calc(var(--spacing) * 2);
 }
 

@@ -40,7 +40,7 @@ function init() {
       state.zoom   = data.zoom
       Object.assign(state.bounds, data.bounds)
       state.markers.splice(0, state.markers.length, ...buildMarkers(data))
-    }).catch(console.error)
+    }).catch(() => {})
   }
   return initPromise
 }
