@@ -1,93 +1,140 @@
 # ❤️U Festival 2026 — PWA
 
-De officiële Progressive Web App voor het ❤️U Festival 2026, een tweedaags studentenfestival in Utrecht (15 & 16 augustus 2026, Grasweide Strijkviertel).
+De officiële Progressive Web App voor het ❤️U Festival 2026, een tweedaags studentenfestival in Utrecht (**5 & 6 augustus 2026**, Grasweide Strijkviertel).
 
 ## Features
 
-- **4 schermen**: Home (nieuws), Info (accordion), Schedule (blokkenschema), Map (OpenLayers + GPS)
-- **Tweetalig**: Nederlands / Engels met toggle
-- **Dark/Light mode**: met system-preference detectie
-- **PWA**: installeerbaar, offline bruikbaar via service worker (Workbox)
-- **Favorieten**: sla favoriete acts op in localStorage
-- **Notificaties**: Web Notifications API — herinnering 15/10/5 min voor aanvang
-- **Interactieve kaart**: OpenLayers met OpenStreetMap, GPS-locatie, podium-markers
-- **Blokkenschema**: horizontaal + verticaal scrollbaar, dag-selector, favorietenfilter, act-detail modal met YouTube embed
+- **4 schermen**: Home (nieuws + countdown), Info (accordion), Schedule (blokkenschema), Map (interactieve SVG-kaart)
+- **Tweetalig**: Nederlands / Engels via toggle in de header
+- **Dark/Light mode**: automatisch op basis van systeemvoorkeur, handmatig te wisselen
+- **PWA**: installeerbaar op mobiel en desktop, offline bruikbaar via Workbox service worker
+- **Favorieten**: sla favoriete acts op in localStorage, filter zichtbaar in de agenda
+- **Notificaties**: Web Notifications API — herinnering 15/10/5 min voor aanvang van een act
+- **Interactieve kaart**: custom SVG-kaart (90° gedraaid), pan/zoom/pinch, clickbare icoontjes met info-panel (acts per podium per dag), GPS-locatie chip alleen zichtbaar op festivalterrein
+- **Agenda/blokkenschema**: horizontaal + verticaal scrollbaar, dag-selector, genrefilter als chips, favorietenfilter, act-detail modal met YouTube embed
+- **PWA install-prompt**: "Installeer app" knop verschijnt automatisch als browser dit ondersteunt
 
 ## Tech Stack
 
-- Vue 3 + Vite
-- vue-router (client-side routing)
-- vue-i18n (NL/EN)
-- OpenLayers (kaart)
-- vite-plugin-pwa / Workbox (service worker + caching)
-- Google Fonts (Sansation) + Material Icons
-- Geen externe CSS frameworks — custom CSS met CSS custom properties
+- **Vue 3** + **Vite 7**
+- **vue-router 5** (client-side routing, 4 routes)
+- **vue-i18n 11** (NL/EN vertalingen via API of JSON-fallback)
+- **vite-plugin-pwa / Workbox** (service worker, precaching, offline)
+- **Geen kaartbibliotheek** — custom pan/zoom/pinch via raw DOM events op SVG-afbeelding
+- **Google Fonts (Sansation)** + **Material Icons**
+- **Geen externe CSS frameworks** — custom CSS met CSS custom properties (light/dark thema)
+- **PHP API** (lokaal via XAMPP) + **JSON-fallback** (productie op Vercel)
+
+## Vereisten
+
+| Omgeving | Vereisten |
+|----------|-----------|
+| Lokaal   | Node.js ≥ 18, XAMPP (Apache + MySQL) |
+| Productie | Vercel (statische hosting, geen PHP nodig) |
 
 ## Installeren & Lokaal draaien
 
 ```bash
 # Clone de repository
-git clone <repo-url>
+git clone https://github.com/RidouanRashid/8.1---Module---U-Festival-App---2026.git
 cd "8.1 - Module - U Festival App - 2026"
 
 # Installeer dependencies
 npm install
 
-# Start development server
+# Start development server (Vite)
 npm run dev
-
-# Open in browser
-# http://localhost:5173
+# → http://localhost:5173
 ```
+
+> **Lokale API (optioneel)**: Zet de map in `C:\xampp\htdocs\` en start Apache + MySQL in XAMPP.  
+> Voer `scripts/setup_db.sql` uit in phpMyAdmin om de database aan te maken.  
+> Zonder XAMPP werkt de app via de JSON-fallback in `public/data/`.
 
 ## Builden voor productie
 
 ```bash
-npm run build
-npm run preview   # lokaal previewen van productie-build
+npm run build        # output in /dist
+npm run preview      # lokaal previewen van de productie-build
 ```
 
-De build output staat in `/dist`. Deploy deze map naar een webserver met HTTPS.
+## Deployen op Vercel
 
-## Deployen
+De app is geconfigureerd voor Vercel via `vercel.json`. Alle routes vallen terug op `index.html` (SPA-routing). Data wordt geserveerd via statische JSON-bestanden in `public/data/`.
 
-Upload de inhoud van `/dist` naar een HTTPS-hosting (bijv. Netlify, Vercel, GitHub Pages).
+```bash
+# Eenmalig koppelen
+vercel link
 
-> **Belangrijk**: HTTPS is vereist voor Geolocation API en Push Notifications.
+# Deployen
+vercel --prod
+```
 
-## Content updaten
+> **Belangrijk**: HTTPS is vereist voor de Geolocation API en Web Notifications.
 
-Alle content staat in JSON-bestanden in `src/assets/data/`:
+## Content bijwerken
 
-| Bestand         | Inhoud                          |
-|----------------|---------------------------------|
-| `news.json`    | Nieuwsberichten (Home)          |
-| `info.json`    | Festival info (Info accordion)  |
-| `schedule.json`| Programmering per dag/podium    |
-| `acts.json`    | Artiest-details + YouTube links |
-| `map.json`     | Kaart-instellingen + podia      |
+Statische data (Vercel / JSON-fallback) staat in `public/data/`:
 
-Vertaling: elk bestand heeft `nl` en `en` secties (of `_nl`/`_en` velden).
+| Bestand              | Inhoud                                      |
+|----------------------|---------------------------------------------|
+| `public/data/acts.json`     | Artiest-details (naam, genre, YouTube)      |
+| `public/data/schedule.json` | Programmering per dag en podium             |
+| `public/data/map.json`      | Kaartmarkers (podia + faciliteiten)         |
+| `public/data/news.json`     | Nieuwsberichten (Home)                      |
+| `public/data/info.json`     | Festival info (Info accordion)              |
+| `public/data/locales.json`  | NL/EN vertalingen (UI-teksten)              |
+
+Voor de lokale PHP/MySQL omgeving: pas `scripts/setup_db.sql` aan en herlaad de database.
 
 ## Projectstructuur
 
 ```
+api/                  ← PHP endpoints (alleen lokaal/XAMPP)
+  acts.php
+  db.php
+  info.php
+  locales.php
+  map.php
+  news.php
+  schedule.php
+pictures/             ← SVG festivalkaart + marker-icoontjes
 public/
-  icons/          ← PWA iconen
-  favicon.svg
+  data/               ← JSON-fallback voor alle endpoints
+  icons/              ← PWA iconen (192, 512, maskable)
+  screenshots/        ← PWA install screenshots
   robots.txt
+scripts/
+  setup_db.sql        ← Database schema + seed data
 src/
-  assets/data/    ← JSON content bestanden
-  components/     ← AppHeader, BottomNav, ActModal
-  composables/    ← useFavorites, useNotifications
-  locales/        ← NL/EN i18n vertalingen
-  views/          ← HomeView, InfoView, ScheduleView, MapView
-  App.vue
+  assets/
+    data/media.js     ← Afbeeldingenlijst (hero + galerij)
+    images/           ← Afbeeldingen voor galerij
+  components/
+    ActModal.vue      ← Act-detail popup met YouTube embed
+    AppHeader.vue     ← Header met thema/taal/install toggle
+    BottomNav.vue     ← Navigatiebalk onderaan
+  composables/
+    useApi.js         ← Unified fetch: PHP-first, JSON-fallback
+    useFavorites.js   ← Favorietenlijst (localStorage)
+    useMapStore.js    ← Gedeelde kaart-state + markerposities
+    useNotifications.js ← Web Notifications voor acts
+  locales/
+    index.js          ← vue-i18n setup
+  map/
+    iconRegistry.js   ← SVG-icoontjes per podium/faciliteit
+  views/
+    HomeView.vue      ← Home: hero, galerij, nieuws
+    InfoView.vue      ← Info: accordion met festivalinfo
+    ScheduleView.vue  ← Agenda: blokkenschema + filters
+    MapView.vue       ← Kaart: SVG + pan/zoom/markers/GPS
+  App.vue             ← Root layout, thema, taal, route-transitie
   main.js
   router.js
-  style.css       ← Globale CSS variabelen en reset
+  style.css           ← Globale CSS custom properties (light/dark)
 index.html
 vite.config.js
+vercel.json           ← Vercel SPA-routing configuratie
 ```
 
 ---
