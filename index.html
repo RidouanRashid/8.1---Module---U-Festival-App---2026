@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#F03228" />
   <meta name="description" content="De officiële app voor het ❤️U Festival 2026 in Utrecht" />
-  <link rel="manifest" href="/manifest.webmanifest">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/icons/icon-192.png" />
   <link rel="preload" href="https://fonts.googleapis.com/icon?family=Material+Icons" as="style" />
@@ -23,12 +22,5 @@
 <body>
   <div id="app"></div>
   <script type="module" src="/src/main.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js');
-      });
-    }
-  </script>
 </body>
 </html>
