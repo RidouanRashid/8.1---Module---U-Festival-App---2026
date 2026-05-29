@@ -8,6 +8,8 @@
         loading="eager"
         fetchpriority="high"
         decoding="async"
+        width="800"
+        height="600"
       />
       <div class="hero-overlay"></div>
       <div class="hero-content">
@@ -29,10 +31,12 @@
           v-for="(image, idx) in wallImages"
           :key="image"
           :src="image"
-          :alt="`Festival photo ${idx + 1}`"
+          :alt="`Festival foto ${idx + 1}`"
           class="wall-photo"
           loading="lazy"
           decoding="async"
+          width="400"
+          height="400"
         />
       </div>
     </section>
