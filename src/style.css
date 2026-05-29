@@ -8,6 +8,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
+  background-color: var(--color-base);
 }
 
 body {
@@ -20,6 +21,7 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* ===== CSS CUSTOM PROPERTIES ===== */
@@ -90,17 +92,34 @@ button {
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
+  background: var(--color-base);
+  color: var(--color-primary);
+}
+
+.app-shell {
+  min-height: 100dvh;
+  background: var(--color-base);
 }
 
 .page-content {
   flex: 1;
   padding: calc(var(--header-height) + var(--safe-top) + var(--spacing) * 2) calc(var(--spacing) * 2) calc(var(--nav-height) + var(--safe-bottom) + var(--spacing) * 2);
   overflow-y: auto;
+  background: var(--color-base);
 }
 
 .page-content--map {
   padding: 0;
   overflow: hidden;
+  height: 100svh;
+  min-height: 100svh;
+}
+
+@supports (height: 100dvh) {
+  .page-content--map {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
 }
 
 /* ===== UTILITY ===== */

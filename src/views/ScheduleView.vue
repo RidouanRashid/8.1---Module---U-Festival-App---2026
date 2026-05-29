@@ -32,13 +32,39 @@
       </button>
     </div>
 
+    <div class="genre-filter card">
+      <p class="genre-label">{{ $t('schedule.genre') }}</p>
+      <div class="genre-chips" role="group" aria-label="Genre filter">
+        <button
+          class="genre-chip"
+          :class="{ active: selectedGenre === 'all' }"
+          @click="selectedGenre = 'all'"
+        >
+          Alle
+        </button>
+        <button
+          v-for="genre in availableGenres"
+          :key="genre"
+          class="genre-chip"
+          :class="{ active: selectedGenre === genre }"
+          @click="selectedGenre = genre"
+        >
+          {{ genre }}
+        </button>
+      </div>
+    </div>
+
     <!-- No favorites message -->
     <p v-if="showFavorites && !hasFavoritesInDay" class="no-favorites">
       {{ $t('schedule.noFavorites') }}
     </p>
 
+    <p v-if="!hasVisibleActsInDay" class="no-favorites">
+      Geen acts gevonden met deze filters.
+    </p>
+
     <!-- Schedule grid -->
-    <div v-show="!showFavorites || hasFavoritesInDay" class="schedule-container">
+    <div v-show="hasVisibleActsInDay" class="schedule-container">
       <div class="schedule-grid" ref="gridRef">
         <!-- Time header row -->
         <div class="time-header-row">
@@ -119,6 +145,7 @@ const { requestPermission, scheduleNotification, cancelNotifications } = useNoti
 
 const selectedDay = ref('saturday')
 const showFavorites = ref(false)
+const selectedGenre = ref('all')
 const selectedAct = ref(null)
 const selectedStageName = ref('')
 const selectedStageColor = ref('')
@@ -156,11 +183,22 @@ const slotWidth = SLOT_WIDTH * 4 // 4 slots of 15min = 1 hour
 
 const currentDay = computed(() => scheduleData.value?.[selectedDay.value])
 const currentStages = computed(() => currentDay.value?.stages || [])
+const availableGenres = computed(() => {
+  const values = new Set()
+  currentStages.value.forEach(stage => {
+    stage.acts.forEach(act => values.add(act.genre))
+  })
+  return Array.from(values).sort((a, b) => a.localeCompare(b))
+})
 
 const hasFavoritesInDay = computed(() => {
   return currentStages.value.some(stage =>
     stage.acts.some(act => isFavorite(act.id))
   )
+})
+
+const hasVisibleActsInDay = computed(() => {
+  return currentStages.value.some(stage => filteredActs(stage).length > 0)
 })
 
 function stageColor(stageId) {
@@ -187,14 +225,20 @@ function actStyle(act, stageId) {
 }
 
 function filteredActs(stage) {
-  if (!showFavorites.value) return stage.acts
-  return stage.acts.filter(act => isFavorite(act.id))
+  let acts = stage.acts
+  if (selectedGenre.value !== 'all') {
+    acts = acts.filter(act => act.genre === selectedGenre.value)
+  }
+  if (showFavorites.value) {
+    acts = acts.filter(act => isFavorite(act.id))
+  }
+  return acts
 }
 
 function openAct(act, stage) {
   selectedAct.value = act
   selectedStageName.value = stage.name
-  selectedStageColor.value = stageColors[stage.id] || '#555'
+  selectedStageColor.value = stageColors.value[stage.id] || '#555'
 }
 
 async function handleFavToggle(act, stage) {
@@ -237,6 +281,54 @@ onMounted(async () => {
 
 .filter-btn {
   width: 100%;
+}
+
+.genre-filter {
+  margin-bottom: calc(var(--spacing) * 2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.genre-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.genre-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.genre-chip {
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-base);
+  color: var(--color-primary);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  transition: transform 0.12s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.genre-chip:hover {
+  border-color: var(--color-accent);
+}
+
+.genre-chip:active {
+  transform: scale(0.97);
+}
+
+.genre-chip.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
 }
 
 .no-favorites {

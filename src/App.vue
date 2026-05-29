@@ -1,5 +1,5 @@
 <template>
-  <div :data-theme="theme">
+  <div class="app-shell">
     <AppHeader v-if="!isMapRoute" @toggle-theme="toggleTheme" @toggle-lang="toggleLang" :theme="theme" />
     <main class="page-content" :class="{ 'page-content--map': isMapRoute }">
       <router-view v-slot="{ Component, route }">
@@ -42,9 +42,18 @@ function getInitialTheme() {
 
 const theme = ref(getInitialTheme())
 
+function applyTheme(value) {
+  document.documentElement.setAttribute('data-theme', value)
+  document.body.setAttribute('data-theme', value)
+}
+
+watch(theme, value => {
+  applyTheme(value)
+  try { localStorage.setItem('loveU_theme', value) } catch { /* ignore */ }
+}, { immediate: true })
+
 function toggleTheme() {
   theme.value = theme.value === 'light' ? 'dark' : 'light'
-  try { localStorage.setItem('loveU_theme', theme.value) } catch { /* ignore */ }
 }
 
 function toggleLang() {
