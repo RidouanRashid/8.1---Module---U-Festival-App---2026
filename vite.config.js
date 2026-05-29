@@ -17,6 +17,9 @@ export default defineConfig({
     vue(),
     VitePWA({
       registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true,
+      },
       includeAssets: ['favicon.svg', 'robots.txt'],
       manifest: {
         name: '❤️U Festival 2026',
