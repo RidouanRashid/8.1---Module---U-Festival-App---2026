@@ -45,11 +45,16 @@
                   :class="{ open: openFaqs[section.id + '-' + idx] }"
                   @click="toggleFaq(section.id + '-' + idx)"
                   :aria-expanded="openFaqs[section.id + '-' + idx]"
+                  :aria-controls="'faq-' + section.id + '-' + idx"
                 >
                   <span>{{ q.question }}</span>
                   <span class="material-icons faq-icon">expand_more</span>
                 </button>
-                <div class="faq-answer" :class="{ open: openFaqs[section.id + '-' + idx] }">
+                <div
+                  :id="'faq-' + section.id + '-' + idx"
+                  class="faq-answer"
+                  :class="{ open: openFaqs[section.id + '-' + idx] }"
+                >
                   <p class="info-text">{{ q.answer }}</p>
                 </div>
               </div>

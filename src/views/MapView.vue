@@ -48,6 +48,9 @@
       <button class="map-btn map-btn--icon" aria-label="Kaart terugzetten" @click="resetView">
         <span class="material-icons">center_focus_strong</span>
       </button>
+      <button class="map-btn map-btn--icon" aria-label="Mijn locatie" @click="enableLocation">
+        <span class="material-icons">my_location</span>
+      </button>
     </div>
 
     <!-- GPS status chip -->
@@ -270,8 +273,12 @@ onMounted(() => {
   updateImageRect()
   resizeObserver = new ResizeObserver(updateImageRect)
   resizeObserver.observe(viewport.value)
-  startLocation()
 })
+
+function enableLocation() {
+  if (watchId !== null) return
+  startLocation()
+}
 
 onUnmounted(() => {
   resizeObserver?.disconnect()

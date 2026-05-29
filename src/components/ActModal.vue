@@ -2,7 +2,7 @@
   <Teleport to="body">
     <transition name="modal">
       <div v-if="act" class="modal-overlay" @click.self="$emit('close')">
-        <div class="modal-sheet" role="dialog" aria-modal="true">
+        <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modal-artist-name">
           <div class="modal-handle"></div>
 
           <button class="modal-close" @click="$emit('close')" aria-label="Close">
@@ -21,7 +21,7 @@
               <span v-else class="avatar-initials">{{ initials }}</span>
             </div>
 
-            <h2 class="artist-name">{{ act.artist }}</h2>
+            <h2 id="modal-artist-name" class="artist-name">{{ act.artist }}</h2>
 
             <div class="act-meta">
               <div class="meta-item">
