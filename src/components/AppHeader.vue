@@ -9,6 +9,14 @@
     </div>
     <div class="header-actions">
       <button
+        v-if="installAvailable"
+        class="header-btn"
+        @click="$emit('install-app')"
+        :aria-label="currentLocale === 'nl' ? 'App installeren' : 'Install app'"
+      >
+        <span class="material-icons">download</span>
+      </button>
+      <button
         class="header-btn"
         @click="$emit('toggle-lang')"
         :aria-label="$t('common.language')"
@@ -31,10 +39,11 @@ import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 
 const props = defineProps({
-  theme: String
+  theme: String,
+  installAvailable: Boolean,
 })
 
-defineEmits(['toggle-theme', 'toggle-lang'])
+defineEmits(['toggle-theme', 'toggle-lang', 'install-app'])
 
 const { locale } = useI18n()
 const currentLocale = computed(() => locale.value)
