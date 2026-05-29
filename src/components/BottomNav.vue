@@ -1,5 +1,5 @@
 <template>
-  <nav class="bottom-nav" role="navigation" :aria-label="$t('nav.home')">
+  <nav class="bottom-nav" :aria-label="locale === 'nl' ? 'Hoofdnavigatie' : 'Main navigation'">
     <router-link
       v-for="item in navItems"
       :key="item.to"
@@ -15,6 +15,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { locale } = useI18n()
+
 const navItems = [
   { to: '/', icon: 'home', label: 'nav.home' },
   { to: '/info', icon: 'info', label: 'nav.info' },

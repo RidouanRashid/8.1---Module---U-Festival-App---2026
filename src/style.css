@@ -12,7 +12,7 @@ html {
 }
 
 body {
-  font-family: 'Sansation', sans-serif;
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-weight: 400;
   line-height: 1.5;
   color: var(--color-primary);
@@ -26,16 +26,16 @@ body {
 
 /* ===== CSS CUSTOM PROPERTIES ===== */
 :root {
-  --color-accent: #F03228;
+  --color-accent: #C62821;
   --color-primary: #000000;
   --color-base: #FFFFFF;
   --color-secondary: #247BA0;
   --color-info: #E3B505;
-  --color-neutral: #555555;
+  --color-neutral: #4D4D4D;
 
   --color-surface: #F5F5F5;
   --color-border: #E0E0E0;
-  --color-text-muted: #666666;
+  --color-text-muted: #4A4A4A;
 
   --header-height: 56px;
   --nav-height: 64px;
@@ -53,12 +53,12 @@ body {
   --color-base: #121212;
   --color-surface: #1E1E1E;
   --color-border: #333333;
-  --color-text-muted: #AAAAAA;
+  --color-text-muted: #CFCFCF;
 }
 
 /* ===== TYPOGRAPHY ===== */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Sansation', sans-serif;
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-weight: 700;
   color: var(--color-secondary);
   line-height: 1.2;
@@ -76,7 +76,7 @@ a {
 }
 
 button {
-  font-family: 'Sansation', sans-serif;
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-weight: 300;
   font-style: italic;
   cursor: pointer;
@@ -174,7 +174,7 @@ button {
   gap: calc(var(--spacing));
   padding: calc(var(--spacing) * 1.5) calc(var(--spacing) * 3);
   border-radius: var(--radius);
-  font-family: 'Sansation', sans-serif;
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-weight: 300;
   font-style: italic;
   font-size: 0.9rem;

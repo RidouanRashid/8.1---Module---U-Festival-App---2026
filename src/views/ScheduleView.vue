@@ -255,9 +255,6 @@ async function handleFavToggle(act, stage) {
   }
 }
 
-onMounted(async () => {
-  await requestPermission()
-})
 </script>
 
 <style scoped>
