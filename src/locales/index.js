@@ -1,6 +1,5 @@
 import { createI18n } from 'vue-i18n'
-
-const BASE = import.meta.env.VITE_API_BASE ?? '/api'
+import { apiFetch } from '../composables/useApi.js'
 
 function getSavedLocale() {
   try {
@@ -12,9 +11,7 @@ function getSavedLocale() {
 
 async function loadMessages() {
   try {
-    const res = await fetch(`${BASE}/locales.php`)
-    if (!res.ok) throw new Error(`locales.php ${res.status}`)
-    const data = await res.json()
+    const data = await apiFetch('locales.php')
     if (data?.nl && data?.en) return data
   } catch (err) {
     console.error('Failed to load locales from API:', err)

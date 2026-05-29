@@ -1,0 +1,110 @@
+{
+  "nl": {
+    "sections": [
+      {
+        "id": "general",
+        "title": "Algemeen & Contact",
+        "content": "Het U Festival is voor (nieuwe) studenten in de regio Utrecht."
+      },
+      {
+        "id": "location",
+        "title": "Locatie",
+        "content": "Locatie: Grasweide Strijkviertel, Utrecht\nNavigatieadres: Strijkviertelweg, Utrecht"
+      },
+      {
+        "id": "datetime",
+        "title": "Datum & Openingstijden",
+        "content": "Zaterdag 15 augustus 2026 - 10:00 tot 23:45 uur\nZondag 16 augustus 2026 - 10:00 tot 23:45 uur"
+      },
+      {
+        "id": "transport",
+        "title": "Bereikbaarheid",
+        "subsections": [
+          { "title": "Fiets", "content": "Er is een grote gratis fietsenstalling aanwezig." },
+          { "title": "Auto", "content": "Je kunt een parkingticket aanschaffen op P+R Papendorp." },
+          { "title": "OV", "content": "Kom je met het openbaar vervoer? Plan dan je trip via 9292.nl." },
+          { "title": "Shuttlebus", "content": "Vanaf Utrecht Centraal kun je de gratis shuttlebus pakken. Rijdt 12:00-19:00 naar festival, vanaf 21:00 terug." },
+          { "title": "Taxi + Kiss & Ride", "content": "Navigeer naar Strijkviertel, De Meern (Utrecht)." }
+        ]
+      },
+      {
+        "id": "lockers",
+        "title": "Lockers",
+        "content": "Op het festivalterrein zijn kluisjes aanwezig. Hier passen 3 a 4 jassen in."
+      },
+      {
+        "id": "golden-glu",
+        "title": "Golden-GLU",
+        "content": "Studenten van het GLU hebben speciale privileges en zijn herkenbaar aan een gouden armbandje."
+      },
+      {
+        "id": "emergency",
+        "title": "Noodcontacten & Veiligheid",
+        "content": "Spoedeisende hulp: bel 112\n\nPolitie (niet-spoed): bel 0900-8844\n\nEHBO op het festival: zichtbaar aangegeven op het terrein."
+      },
+      {
+        "id": "faq",
+        "title": "FAQ",
+        "questions": [
+          { "question": "Ik gebruik medicatie. Wat nu?", "answer": "Medicijnen in een dagdosis zijn toegestaan. Een doktersverklaring is noodzakelijk." },
+          { "question": "Mag ik het festivalterrein tussentijds verlaten?", "answer": "Nee, dat is helaas niet mogelijk." },
+          { "question": "Zijn er lockers?", "answer": "Ja! Op het terrein kun je medium en grote lockers huren." }
+        ]
+      }
+    ]
+  },
+  "en": {
+    "sections": [
+      {
+        "id": "general",
+        "title": "General & Contact",
+        "content": "The U Festival is for (new) students in the Utrecht region."
+      },
+      {
+        "id": "location",
+        "title": "Location",
+        "content": "Location: Grasweide Strijkviertel, Utrecht\nNavigation address: Strijkviertelweg, Utrecht"
+      },
+      {
+        "id": "datetime",
+        "title": "Date & Opening Hours",
+        "content": "Saturday 15 August 2026 - 10:00 to 23:45\nSunday 16 August 2026 - 10:00 to 23:45"
+      },
+      {
+        "id": "transport",
+        "title": "Getting There",
+        "subsections": [
+          { "title": "Bicycle", "content": "There is a large free bicycle parking area where you can park your bike all day." },
+          { "title": "Car", "content": "Parking is available at P+R Papendorp, follow the signs P online ticket." },
+          { "title": "Public Transport", "content": "Coming by public transport? Plan your trip via 9292.nl." },
+          { "title": "Shuttle Bus", "content": "From Utrecht Centraal take the free shuttle bus. Runs 12:00-19:00 to festival, from 21:00 back." },
+          { "title": "Taxi + Kiss & Ride", "content": "Navigate to Strijkviertel, De Meern (Utrecht)." }
+        ]
+      },
+      {
+        "id": "lockers",
+        "title": "Lockers",
+        "content": "There is a large range of lockers available on the festival grounds."
+      },
+      {
+        "id": "golden-glu",
+        "title": "Golden-GLU",
+        "content": "GLU students have special privileges and are recognisable by a golden wristband."
+      },
+      {
+        "id": "emergency",
+        "title": "Emergency Contacts & Safety",
+        "content": "Emergency services: call 112\n\nPolice (non-emergency): call 0900-8844\n\nFirst aid: clearly marked on the grounds."
+      },
+      {
+        "id": "faq",
+        "title": "FAQ",
+        "questions": [
+          { "question": "I use medication. What now?", "answer": "Medication in a daily dose is permitted. A doctor's statement is required." },
+          { "question": "Can I leave the festival grounds during the event?", "answer": "No, unfortunately that is not possible." },
+          { "question": "Are there lockers?", "answer": "Yes! You can rent medium and large lockers on the grounds." }
+        ]
+      }
+    ]
+  }
+}

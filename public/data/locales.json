@@ -1,0 +1,102 @@
+{
+  "nl": {
+    "nav": {
+      "home": "Home",
+      "info": "Info",
+      "schedule": "Programma",
+      "map": "Kaart"
+    },
+    "home": {
+      "welcome": "Welkom bij",
+      "festivalName": "U Festival 2026",
+      "dates": "Za 15 & Zo 16 augustus 2026",
+      "location": "Grasweide Strijkviertel, Utrecht",
+      "liveNow": "Festival is nu bezig!",
+      "notStarted": "Het festival begint op 15 augustus 2026",
+      "ended": "Het festival is afgelopen. Tot volgend jaar!",
+      "news": "Nieuws"
+    },
+    "info": {
+      "title": "Festival Info"
+    },
+    "schedule": {
+      "title": "Programma",
+      "saturday": "Zaterdag",
+      "sunday": "Zondag",
+      "favorites": "Mijn favorieten",
+      "allActs": "Alle acts",
+      "noFavorites": "Je hebt nog geen favorieten. Tik op het hartje bij een act om deze toe te voegen.",
+      "stage": "Podium",
+      "time": "Tijd",
+      "genre": "Genre",
+      "close": "Sluiten",
+      "notifyOn": "Notificaties aan",
+      "notifyOff": "Notificaties uit",
+      "addFav": "Favoriet toevoegen",
+      "removeFav": "Favoriet",
+      "notificationBody": "{artist} begint over {minutes} minuten op {stage}!",
+      "notificationTitle": "{artist} begint over {minutes} minuten op {stage}!"
+    },
+    "map": {
+      "title": "Festivalkaart",
+      "myLocation": "Mijn locatie",
+      "gpsError": "GPS is niet beschikbaar. Controleer je locatie-instellingen.",
+      "gpsDenied": "Locatietoegang is geweigerd. Schakel dit in via je browserinstellingen."
+    },
+    "common": {
+      "darkMode": "Donkere modus",
+      "lightMode": "Lichte modus",
+      "language": "Taal"
+    }
+  },
+  "en": {
+    "nav": {
+      "home": "Home",
+      "info": "Info",
+      "schedule": "Schedule",
+      "map": "Map"
+    },
+    "home": {
+      "welcome": "Welcome to",
+      "festivalName": "U Festival 2026",
+      "dates": "Sat 15 & Sun 16 August 2026",
+      "location": "Grasweide Strijkviertel, Utrecht",
+      "liveNow": "Festival is live now!",
+      "notStarted": "The festival starts on August 15, 2026",
+      "ended": "The festival has ended. See you next year!",
+      "news": "News"
+    },
+    "info": {
+      "title": "Festival Info"
+    },
+    "schedule": {
+      "title": "Schedule",
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "favorites": "My favorites",
+      "allActs": "All acts",
+      "noFavorites": "No favorites yet. Tap the heart on an act to add it.",
+      "stage": "Stage",
+      "time": "Time",
+      "genre": "Genre",
+      "close": "Close",
+      "notifyOn": "Notifications on",
+      "notifyOff": "Notifications off",
+      "addFav": "Add to favorites",
+      "removeFav": "Favorited",
+      "notificationBody": "{artist} starts in {minutes} minutes at {stage}!",
+      "notificationTitle": "{artist} starts in {minutes} minutes at {stage}!"
+    },
+    "map": {
+      "title": "Festival Map",
+      "myLocation": "My location",
+      "gpsError": "GPS is not available. Check your location settings.",
+      "gpsDenied": "Location access was denied. Enable it in your browser settings."
+    },
+    "common": {
+      "darkMode": "Dark mode",
+      "lightMode": "Light mode",
+      "language": "Language"
+    }
+  }
+}

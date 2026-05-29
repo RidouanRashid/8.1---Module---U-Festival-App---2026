@@ -1,0 +1,90 @@
+[
+  {
+    "id": "armin",
+    "name": "Armin van Buuren",
+    "genre": "Trance",
+    "description_nl": "Five-time 'World's No. 1 DJ' en trance-icoon. Armin levert euforische, energieke sets die headlined hebben op festivals als Tomorrowland en Ultra.",
+    "description_en": "Five-time 'World's No. 1 DJ' and trance icon, Armin delivers euphoric, high-energy sets that have headlined festivals from Tomorrowland to Ultra.",
+    "youtube": "https://www.youtube.com/watch?v=TxvpctgU_s8"
+  },
+  {
+    "id": "martin",
+    "name": "Martin Garrix",
+    "genre": "EDM",
+    "description_nl": "Brak door als tiener met 'Animals' en groeide uit tot een van de grootste namen in de EDM-wereld.",
+    "description_en": "Broke through as a teenager with 'Animals', Martin Garrix has become one of the biggest names in EDM.",
+    "youtube": "https://www.youtube.com/watch?v=Zv1QV6lrc_Y"
+  },
+  {
+    "id": "kensington",
+    "name": "Kensington",
+    "genre": "Indie Rock",
+    "description_nl": "Rotterdams indie rock kwintet bekend om stijgende refreinen en krachtige gitaarriffs.",
+    "description_en": "Rotterdam-born indie rock quintet known for soaring choruses and driving guitar riffs.",
+    "youtube": "https://www.youtube.com/watch?v=IH77eOyV95o"
+  },
+  {
+    "id": "within",
+    "name": "Within Temptation",
+    "genre": "Symphonic Metal",
+    "description_nl": "Symfonische metalpioniers o.l.v. Sharon den Adel.",
+    "description_en": "Symphonic metal pioneers fronted by Sharon den Adel.",
+    "youtube": "https://www.youtube.com/watch?v=iQVei5C2N4E"
+  },
+  {
+    "id": "de-staat",
+    "name": "De Staat",
+    "genre": "Experimental Rock",
+    "description_nl": "Experimentele rockband uit Nijmegen.",
+    "description_en": "Experimental rock outfit from Nijmegen.",
+    "youtube": "https://www.youtube.com/watch?v=0ttGgIQpAUc"
+  },
+  {
+    "id": "chefspecial",
+    "name": "Chef'Special",
+    "genre": "Funk-pop",
+    "description_nl": "Viertal uit Haarlem dat funk, pop, rock en hip-hop mixt.",
+    "description_en": "A four-piece from Haarlem mixing funk, pop, rock and hip-hop.",
+    "youtube": "https://www.youtube.com/watch?v=l3jRIr44lss"
+  },
+  {
+    "id": "navarone",
+    "name": "Navarone",
+    "genre": "Rock",
+    "description_nl": "Utrechts hardrockend viertal met riff-gedreven anthems.",
+    "description_en": "Utrecht's hard-hitting rock four-piece.",
+    "youtube": "https://www.youtube.com/watch?v=EvLpaCSnc4k"
+  },
+  {
+    "id": "dotan",
+    "name": "Dotan",
+    "genre": "Folk-pop",
+    "description_nl": "Folk-pop singer-songwriter.",
+    "description_en": "Folk-pop singer-songwriter.",
+    "youtube": "https://www.youtube.com/watch?v=FZEuqzW16Nw"
+  },
+  {
+    "id": "eefje",
+    "name": "Eefje de Visser",
+    "genre": "Indie-pop",
+    "description_nl": "Indie-popartiest met atmosferische nummers.",
+    "description_en": "Indie-pop artist crafting atmospheric songs.",
+    "youtube": "https://www.youtube.com/watch?v=6IlLJNmLDMg"
+  },
+  {
+    "id": "froukje",
+    "name": "Froukje",
+    "genre": "Pop",
+    "description_nl": "Doorbraak-popzangeres met openhartige teksten.",
+    "description_en": "Breakthrough pop singer combining candid lyrics with catchy hooks.",
+    "youtube": "https://www.youtube.com/watch?v=g4PlReX9e-E"
+  },
+  {
+    "id": "spinvis",
+    "name": "Spinvis",
+    "genre": "Lo-fi pop",
+    "description_nl": "Erik de Jong als Spinvis: poetische, collageachtige nummers.",
+    "description_en": "Erik de Jong performs poetic, collage-like songs.",
+    "youtube": "https://www.youtube.com/watch?v=F3ZTrGWSLf4"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "center": [52.0603, 5.053],
+  "zoom": 16,
+  "bounds": {
+    "top": 52.063,
+    "bottom": 52.0578,
+    "left": 5.049,
+    "right": 5.0568
+  },
+  "stages": [
+    { "name": "Poton", "color": "#F03228", "lat": 52.0606, "lng": 5.0528 },
+    { "name": "The Lake", "color": "#247BA0", "lat": 52.0601, "lng": 5.0535 },
+    { "name": "The Club", "color": "#E3B505", "lat": 52.0598, "lng": 5.0522 },
+    { "name": "Hanggar", "color": "#555555", "lat": 52.061, "lng": 5.054 }
+  ],
+  "facilities": [
+    { "type": "entrance_exit", "lat": 52.0617, "lng": 5.0556 },
+    { "type": "bar", "lat": 52.0609, "lng": 5.0523 },
+    { "type": "food", "lat": 52.0605, "lng": 5.0529 },
+    { "type": "first_aid", "lat": 52.0608, "lng": 5.0533 },
+    { "type": "toilet", "lat": 52.0608, "lng": 5.0517 },
+    { "type": "locker", "lat": 52.0614, "lng": 5.0546 },
+    { "type": "merchandise", "lat": 52.0607, "lng": 5.0527 },
+    { "type": "ice_cream", "lat": 52.0606, "lng": 5.0531 }
+  ]
+}
